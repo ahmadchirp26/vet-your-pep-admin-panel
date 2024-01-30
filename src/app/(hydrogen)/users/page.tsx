@@ -1,38 +1,41 @@
-'use client'
-import PageHeader from '@/app/shared/page-header'
-import UsersTable from '@/app/shared/users/user-list/table'
-import useGetCustomers from '@/api/Customers/useGetCustomers'
+"use client";
+import PageHeader from "@/app/shared/page-header";
+import UsersTable from "@/app/shared/users/user-list/table";
+import useGetCustomers from "@/api/Customers/useGetCustomers";
 
 const pageHeader = {
-  title: 'Users',
+  title: "Users",
   breadcrumb: [
     {
-      name: 'Users List'
-    }
-  ]
-}
+      name: "Dashboard",
+    },
+    {
+      name: "User List",
+    },
+  ],
+};
 
 export default function UsersPage() {
-  const { data, status, error, currentPage, setCurrentPage } = useGetCustomers()
+  const { data, status, error, pageParams, filters } = useGetCustomers();
 
-  if (status === 'pending') {
-    return <p>Pending...</p>
+  if (status === "pending") {
+    return <p>Pending...</p>;
   }
   if (error) {
-    return <p>Error loading data</p>
+    return <p>Error loading data</p>;
   }
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
       <UsersTable
         data={data.getCustomersAdmin.results}
-        page={currentPage}
-        setPage={page => {
-          setCurrentPage(page)
+        remotePagination={pageParams}
+        remoteSearch={{
+          searchTerm: filters.searchQuery ?? "",
+          onSearchChange: (q) =>
+            filters.setSearchQuery(Boolean(q) ? q : undefined),
         }}
-        pageSize={data.getCustomersAdmin.limit ?? 0}
-        totalRows={data.getCustomersAdmin.totalRows ?? 0}
       />
     </>
-  )
+  );
 }

@@ -18,12 +18,10 @@ const Drawer = dynamic(
 function FilterDrawerView({
   isOpen,
   drawerTitle,
-  hasSearched,
   setOpenDrawer,
   children,
 }: React.PropsWithChildren<{
   drawerTitle?: string;
-  hasSearched?: boolean;
   setOpenDrawer: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen?: boolean;
 }>) {
@@ -69,13 +67,12 @@ export type TableFilterProps = {
   searchTerm: string;
   onSearchClear: () => void;
   onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  columns: { [key: string]: any }[];
+  columns: Record<string, unknown>[];
   checkedColumns: string[];
   setCheckedColumns: React.Dispatch<React.SetStateAction<string[]>>;
   hideIndex?: number;
   children?: React.ReactNode;
   drawerTitle?: string;
-  hasSearched?: boolean;
   showSearchOnTheRight?: boolean;
   enableDrawerFilter?: boolean;
   menu?: React.ReactNode;
@@ -90,7 +87,6 @@ export default function TableFilter({
   setCheckedColumns,
   hideIndex,
   drawerTitle = 'Table Filters',
-  hasSearched,
   enableDrawerFilter = false,
   showSearchOnTheRight = false,
   menu,
@@ -127,7 +123,6 @@ export default function TableFilter({
                 isOpen={openDrawer}
                 setOpenDrawer={setOpenDrawer}
                 drawerTitle={drawerTitle}
-                hasSearched={hasSearched}
               >
                 {children}
               </FilterDrawerView>
