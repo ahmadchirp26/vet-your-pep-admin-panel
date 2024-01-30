@@ -37,9 +37,9 @@ export default function Sidebar({ className }: { className?: string }) {
 
             return (
               <Fragment key={item.name + '-' + index}>
-                {item?.href ? (
+                {item.href ? (
                   <>
-                    {item?.dropdownItems ? (
+                    {item.dropdownItems ? (
                       <Collapse
                         defaultOpen={isDropdownOpen}
                         header={({ open, toggle }) => (
@@ -108,7 +108,7 @@ export default function Sidebar({ className }: { className?: string }) {
                       </Collapse>
                     ) : (
                       <Link
-                        href={item?.href}
+                        href={item.href}
                         className={cn(
                           'group relative mx-3 my-0.5 flex items-center rounded-md px-3 py-2 font-medium capitalize lg:my-1 2xl:mx-5 2xl:my-2',
                           isActive

@@ -13,8 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  #graphql\n  mutation CreateCustomer(\n    $firstName: String!\n    $lastName: String!\n    $email: String!\n    $password: String!\n  ) {\n    createCustomer(\n      input: { firstName: $firstName, lastName: $lastName, email: $email, password: $password }\n    ) {\n      accessToken\n      user {\n        id\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n": types.CreateCustomerDocument,
     "\n  #graphql\n  mutation Login($input: LoginAdminInput!) {\n    loginAsAdmin(input: $input) {\n      accessToken\n      user {\n        idAdminUser\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n": types.LoginDocument,
+    "\n  query GetCustomersAdmin($input: ListCustomersInputs!) {\n    getCustomersAdmin(input: $input) {\n      totalRows\n      offset\n      limit\n      results {\n        cellPhone\n        email\n        firstName\n        password\n        id\n        isActive\n        lastName\n        role\n        stripeCustomerId\n      }\n    }\n  }\n": types.GetCustomersAdminDocument,
 };
 
 /**
@@ -34,11 +34,11 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  #graphql\n  mutation CreateCustomer(\n    $firstName: String!\n    $lastName: String!\n    $email: String!\n    $password: String!\n  ) {\n    createCustomer(\n      input: { firstName: $firstName, lastName: $lastName, email: $email, password: $password }\n    ) {\n      accessToken\n      user {\n        id\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation CreateCustomer(\n    $firstName: String!\n    $lastName: String!\n    $email: String!\n    $password: String!\n  ) {\n    createCustomer(\n      input: { firstName: $firstName, lastName: $lastName, email: $email, password: $password }\n    ) {\n      accessToken\n      user {\n        id\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  #graphql\n  mutation Login($input: LoginAdminInput!) {\n    loginAsAdmin(input: $input) {\n      accessToken\n      user {\n        idAdminUser\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation Login($input: LoginAdminInput!) {\n    loginAsAdmin(input: $input) {\n      accessToken\n      user {\n        idAdminUser\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  #graphql\n  mutation Login($input: LoginAdminInput!) {\n    loginAsAdmin(input: $input) {\n      accessToken\n      user {\n        idAdminUser\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  mutation Login($input: LoginAdminInput!) {\n    loginAsAdmin(input: $input) {\n      accessToken\n      user {\n        idAdminUser\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query GetCustomersAdmin($input: ListCustomersInputs!) {\n    getCustomersAdmin(input: $input) {\n      totalRows\n      offset\n      limit\n      results {\n        cellPhone\n        email\n        firstName\n        password\n        id\n        isActive\n        lastName\n        role\n        stripeCustomerId\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetCustomersAdmin($input: ListCustomersInputs!) {\n    getCustomersAdmin(input: $input) {\n      totalRows\n      offset\n      limit\n      results {\n        cellPhone\n        email\n        firstName\n        password\n        id\n        isActive\n        lastName\n        role\n        stripeCustomerId\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
