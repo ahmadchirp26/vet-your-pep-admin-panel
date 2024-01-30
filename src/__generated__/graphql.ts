@@ -43,12 +43,15 @@ export type AdminLoginResponse = {
 
 export type Channels = {
   __typename?: 'Channels';
+  channelPrice: Scalars['Float']['output'];
+  channelStatus: ChannelsStatus;
   channelsAbout?: Maybe<Scalars['String']['output']>;
+  channelsBackgroundImage?: Maybe<Scalars['String']['output']>;
   channelsImage?: Maybe<Scalars['String']['output']>;
   channelsRule?: Maybe<Scalars['String']['output']>;
   channelsTitle: Scalars['String']['output'];
-  channelsbackgroundImage?: Maybe<Scalars['String']['output']>;
   idChannel: Scalars['ID']['output'];
+  paidStatusEnum: PaidStatusEnum;
   refIdModerator: Scalars['String']['output'];
 };
 
@@ -56,6 +59,12 @@ export type ChannelsFilterInput = {
   channelsTitle?: InputMaybe<Scalars['String']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
 };
+
+/** The status of channels */
+export enum ChannelsStatus {
+  Private = 'PRIVATE',
+  Public = 'PUBLIC'
+}
 
 export type CreateAdminUserInput = {
   email: Scalars['String']['input'];
@@ -65,10 +74,12 @@ export type CreateAdminUserInput = {
 };
 
 export type CreateChannelsInput = {
+  channelStatus?: ChannelsStatus;
   channelsAbout?: InputMaybe<Scalars['String']['input']>;
   channelsRule?: InputMaybe<Scalars['String']['input']>;
   channelsTitle: Scalars['String']['input'];
   refIdModerator: Scalars['String']['input'];
+  totalPrice?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreateChargeInput = {
@@ -111,6 +122,7 @@ export type CustomerFilterInput = {
   firstName?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CustomerLoginOrRegisterResponse = {
@@ -127,6 +139,8 @@ export type ListChannelsInputs = {
 
 export type ListChannelsResponse = {
   __typename?: 'ListChannelsResponse';
+  limit: Scalars['Float']['output'];
+  offset?: Maybe<Scalars['Float']['output']>;
   results: Array<Channels>;
   totalRows?: Maybe<Scalars['Float']['output']>;
 };
@@ -139,6 +153,8 @@ export type ListCustomersInputs = {
 
 export type ListCustomersResponse = {
   __typename?: 'ListCustomersResponse';
+  limit: Scalars['Float']['output'];
+  offset?: Maybe<Scalars['Float']['output']>;
   results: Array<Customer>;
   totalRows?: Maybe<Scalars['Float']['output']>;
 };
@@ -276,6 +292,12 @@ export type PageData = {
   offset?: Maybe<Scalars['Int']['output']>;
 };
 
+/** The status of channels */
+export enum PaidStatusEnum {
+  Free = 'FREE',
+  Paid = 'PAID'
+}
+
 export type Query = {
   __typename?: 'Query';
   /** The List of Channels with Pagination and filters */
@@ -320,7 +342,6 @@ export type S3SignedUrlResponse = {
 
 /** Social provider types */
 export enum SocialAuthProviders {
-  Facebook = 'FACEBOOK',
   Google = 'GOOGLE'
 }
 
@@ -368,16 +389,6 @@ export enum UserRole {
   User = 'USER'
 }
 
-export type CreateCustomerMutationVariables = Exact<{
-  firstName: Scalars['String']['input'];
-  lastName: Scalars['String']['input'];
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-}>;
-
-
-export type CreateCustomerMutation = { __typename?: 'Mutation', createCustomer: { __typename?: 'CustomerLoginOrRegisterResponse', accessToken: string, user: { __typename?: 'Customer', id: string, email: string, firstName: string, lastName: string } } };
-
 export type LoginMutationVariables = Exact<{
   input: LoginAdminInput;
 }>;
@@ -385,6 +396,13 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', loginAsAdmin: { __typename?: 'AdminLoginResponse', accessToken: string, user: { __typename?: 'Admin', idAdminUser: string, email: string, firstName: string, lastName: string } } };
 
+export type GetCustomersAdminQueryVariables = Exact<{
+  input: ListCustomersInputs;
+}>;
 
-export const CreateCustomerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCustomer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"firstName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lastName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCustomer"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"firstName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"firstName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"lastName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lastName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]} as unknown as DocumentNode<CreateCustomerMutation, CreateCustomerMutationVariables>;
+
+export type GetCustomersAdminQuery = { __typename?: 'Query', getCustomersAdmin: { __typename?: 'ListCustomersResponse', totalRows?: number | null, offset?: number | null, limit: number, results: Array<{ __typename?: 'Customer', cellPhone?: string | null, email: string, firstName: string, password: string, id: string, isActive?: boolean | null, lastName: string, role: UserRole, stripeCustomerId?: string | null }> } };
+
+
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginAdminInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loginAsAdmin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"idAdminUser"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
+export const GetCustomersAdminDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCustomersAdmin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ListCustomersInputs"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCustomersAdmin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalRows"}},{"kind":"Field","name":{"kind":"Name","value":"offset"}},{"kind":"Field","name":{"kind":"Name","value":"limit"}},{"kind":"Field","name":{"kind":"Name","value":"results"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cellPhone"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"stripeCustomerId"}}]}}]}}]}}]} as unknown as DocumentNode<GetCustomersAdminQuery, GetCustomersAdminQueryVariables>;

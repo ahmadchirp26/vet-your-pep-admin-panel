@@ -8,9 +8,6 @@ import { Password } from "@/components/ui/password";
 import * as z from "zod";
 import { useState } from "react";
 import { PiArrowRightBold } from "react-icons/pi";
-import Link from "next/link";
-import { routes } from "@/config/routes";
-import { Text } from "@/components/ui/text";
 import { SubmitHandler } from "react-hook-form";
 import { useLoginMutation } from "@/api/Authentication/useLoginMutation";
 
@@ -88,12 +85,6 @@ export default function LoginInForm() {
                 variant="flat"
                 className="[&>label>span]:font-medium"
               />
-              <Link
-                href={routes.auth.forgotPassword1}
-                className="h-auto p-0 text-sm font-semibold text-blue underline transition-colors hover:text-gray-900 hover:no-underline"
-              >
-                Forget Password?
-              </Link>
             </div>
             <Button className="w-full" type="submit" size="lg" color="info">
               <span>Sign in</span>{" "}

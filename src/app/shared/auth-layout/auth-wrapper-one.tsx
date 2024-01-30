@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import logoImg from "@public/logo.svg";
-import logoImgText from "@public/logo-primary-text.svg";
 import Image from "next/image";
 import { Text } from "@/components/ui/text";
-import toast from "react-hot-toast";
 
 export default function AuthWrapperOne({
   children,
@@ -14,17 +12,6 @@ export default function AuthWrapperOne({
   children: React.ReactNode;
   title: React.ReactNode;
 }) {
-  function handleSignIn() {
-    toast.error(
-      <Text>
-        This is only demo purpose, click on the{" "}
-        <Text tag="b" className="font-semibold text-gray-900">
-          Sign In
-        </Text>{" "}
-        button to login.
-      </Text>,
-    );
-  }
   return (
     <>
       <div className="min-h-screen flex items-center justify-center px-4 py-8 pt-10 md:pt-12 lg:flex lg:p-6 xl:gap-x-10 xl:p-7 2xl:p-10 2xl:pt-10 [&>div]:min-h-[calc(100vh-80px)]">
