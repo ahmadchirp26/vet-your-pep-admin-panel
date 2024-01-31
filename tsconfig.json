@@ -35,6 +35,6 @@
     "**/*.cjs",
     "**/*.mjs",
     ".next/types/**/*.ts"
-  ],
+, "src/lib/react-query-graphql/codegen.ts"  ],
   "exclude": ["node_modules"]
 }
