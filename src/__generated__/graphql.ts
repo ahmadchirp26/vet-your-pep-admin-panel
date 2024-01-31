@@ -43,7 +43,7 @@ export type AdminLoginResponse = {
 
 export type Channels = {
   __typename?: 'Channels';
-  channelPrice: Scalars['Float']['output'];
+  channelPrice?: Maybe<Scalars['Float']['output']>;
   channelStatus: ChannelsStatus;
   channelsAbout?: Maybe<Scalars['String']['output']>;
   channelsBackgroundImage?: Maybe<Scalars['String']['output']>;
@@ -83,7 +83,7 @@ export type CreateChannelsInput = {
 };
 
 export type CreateChargeInput = {
-  amount: Scalars['Float']['input'];
+  amount: Scalars['Int']['input'];
   customerId: Scalars['String']['input'];
   paymentMethodId: Scalars['String']['input'];
 };
@@ -100,6 +100,8 @@ export type Customer = {
   cellPhone?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
+  followers?: Maybe<Array<CustomerFollower>>;
+  following?: Maybe<Array<CustomerFollower>>;
   id: Scalars['ID']['output'];
   isActive?: Maybe<Scalars['Boolean']['output']>;
   lastName: Scalars['String']['output'];
@@ -108,6 +110,8 @@ export type Customer = {
   role: UserRole;
   socialProvider?: Maybe<SocialProvider>;
   stripeCustomerId?: Maybe<Scalars['String']['output']>;
+  totalFollowers?: Maybe<Scalars['Int']['output']>;
+  totalFollowings?: Maybe<Scalars['Int']['output']>;
 };
 
 export type CustomerEmailUpdateResponse = {
@@ -123,6 +127,13 @@ export type CustomerFilterInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CustomerFollower = {
+  __typename?: 'CustomerFollower';
+  followers?: Maybe<Customer>;
+  following?: Maybe<Customer>;
+  id: Scalars['Int']['output'];
 };
 
 export type CustomerLoginOrRegisterResponse = {
@@ -179,6 +190,8 @@ export type Mutation = {
   createChannel: SuccessResponse;
   /** This will signup new Customers */
   createCustomer: CustomerLoginOrRegisterResponse;
+  /** This will follow a customer */
+  followCustomer: SuccessResponse;
   /** Admin Login */
   loginAsAdmin: AdminLoginResponse;
   /** Customer Login */
@@ -189,6 +202,8 @@ export type Mutation = {
   saveCustomerMediaUrl: Scalars['String']['output'];
   /** This will charge the Customer on test stripe */
   testCharge: SuccessResponse;
+  /** This will unfollow a customer */
+  unfollowCustomer: SuccessResponse;
   /** Update admin data */
   updateAdminData: Scalars['String']['output'];
   /** Update admin email */
@@ -226,6 +241,11 @@ export type MutationCreateCustomerArgs = {
 };
 
 
+export type MutationFollowCustomerArgs = {
+  customerId: Scalars['String']['input'];
+};
+
+
 export type MutationLoginAsAdminArgs = {
   input: LoginAdminInput;
 };
@@ -248,6 +268,11 @@ export type MutationSaveCustomerMediaUrlArgs = {
 
 export type MutationTestChargeArgs = {
   chargeInput: CreateChargeInput;
+};
+
+
+export type MutationUnfollowCustomerArgs = {
+  customerId: Scalars['String']['input'];
 };
 
 
@@ -287,7 +312,7 @@ export type MutationUpdateCustomerPasswordArgs = {
 
 export type PageData = {
   __typename?: 'PageData';
-  count: Scalars['Float']['output'];
+  count: Scalars['Int']['output'];
   limit?: Maybe<Scalars['Int']['output']>;
   offset?: Maybe<Scalars['Int']['output']>;
 };
@@ -310,6 +335,12 @@ export type Query = {
   getCustomerUploadUrl: S3SignedUrlResponse;
   /** The List of Customers with Pagination and filters */
   getCustomersAdmin: ListCustomersResponse;
+  /** Get the followers of the authenticated customer */
+  getFollowers: Array<Customer>;
+  /** Get the followers of the authenticated customer */
+  getFollowingTo: Array<Customer>;
+  /** The List of Customers with filters */
+  searchCustomers: SearchCustomersResponse;
   /** check if email already exist */
   validEmailAdmin: SuccessResponse;
 };
@@ -322,6 +353,11 @@ export type QueryGetAllChannelsWithPaginationArgs = {
 
 export type QueryGetCustomersAdminArgs = {
   input: ListCustomersInputs;
+};
+
+
+export type QuerySearchCustomersArgs = {
+  search: Scalars['String']['input'];
 };
 
 
@@ -338,6 +374,13 @@ export type S3SignedUrlResponse = {
   __typename?: 'S3SignedUrlResponse';
   fileName: Scalars['String']['output'];
   signedUrl: Scalars['String']['output'];
+};
+
+export type SearchCustomersResponse = {
+  __typename?: 'SearchCustomersResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  results?: Maybe<Array<Customer>>;
+  totalCount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Social provider types */
