@@ -14,8 +14,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  #graphql\n  mutation Login($input: LoginAdminInput!) {\n    loginAsAdmin(input: $input) {\n      accessToken\n      user {\n        idAdminUser\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n": types.LoginDocument,
-    "\n  query getAllChannelsWithPagination($input: ListChannelsInputs!) {\n    getAllChannelsWithPagination(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        channelPrice\n        channelStatus\n        channelsAbout\n        channelsBackgroundImage\n        channelsImage\n        channelsRule\n        channelsTitle\n        idChannel\n        paidStatusEnum\n        refIdModerator\n      }\n    }\n  }\n": types.GetAllChannelsWithPaginationDocument,
+    "\n  mutation createChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      message\n    }\n  }\n": types.CreateChannelDocument,
+    "\n  #graphql\n  query getAllChannelsWithPagination($input: ListChannelsInput!) {\n    getAllChannelsWithPagination(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        channelBackgroundImage\n        channelImage\n        channelPrice\n        channelRules\n        channelStatus\n        channelTitle\n        channelsAbout\n        idChannel\n        isChannelPaid\n        refIdModerator\n      }\n    }\n  }\n": types.GetAllChannelsWithPaginationDocument,
     "\n  query GetCustomersAdmin($input: ListCustomersInputs!) {\n    getCustomersAdmin(input: $input) {\n      totalRows\n      offset\n      limit\n      results {\n        cellPhone\n        email\n        firstName\n        password\n        id\n        isActive\n        lastName\n        role\n        stripeCustomerId\n      }\n    }\n  }\n": types.GetCustomersAdminDocument,
+    "\n  query searchCustomers($input: String!) {\n    searchCustomers(search: $input) {\n      message\n      results {\n        id\n        firstName\n        lastName\n        email\n      }\n      totalCount\n    }\n  }\n": types.SearchCustomersDocument,
 };
 
 /**
@@ -39,11 +41,19 @@ export function graphql(source: "\n  #graphql\n  mutation Login($input: LoginAdm
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query getAllChannelsWithPagination($input: ListChannelsInputs!) {\n    getAllChannelsWithPagination(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        channelPrice\n        channelStatus\n        channelsAbout\n        channelsBackgroundImage\n        channelsImage\n        channelsRule\n        channelsTitle\n        idChannel\n        paidStatusEnum\n        refIdModerator\n      }\n    }\n  }\n"): (typeof documents)["\n  query getAllChannelsWithPagination($input: ListChannelsInputs!) {\n    getAllChannelsWithPagination(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        channelPrice\n        channelStatus\n        channelsAbout\n        channelsBackgroundImage\n        channelsImage\n        channelsRule\n        channelsTitle\n        idChannel\n        paidStatusEnum\n        refIdModerator\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  mutation createChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation createChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      message\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  #graphql\n  query getAllChannelsWithPagination($input: ListChannelsInput!) {\n    getAllChannelsWithPagination(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        channelBackgroundImage\n        channelImage\n        channelPrice\n        channelRules\n        channelStatus\n        channelTitle\n        channelsAbout\n        idChannel\n        isChannelPaid\n        refIdModerator\n      }\n    }\n  }\n"): (typeof documents)["\n  #graphql\n  query getAllChannelsWithPagination($input: ListChannelsInput!) {\n    getAllChannelsWithPagination(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        channelBackgroundImage\n        channelImage\n        channelPrice\n        channelRules\n        channelStatus\n        channelTitle\n        channelsAbout\n        idChannel\n        isChannelPaid\n        refIdModerator\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query GetCustomersAdmin($input: ListCustomersInputs!) {\n    getCustomersAdmin(input: $input) {\n      totalRows\n      offset\n      limit\n      results {\n        cellPhone\n        email\n        firstName\n        password\n        id\n        isActive\n        lastName\n        role\n        stripeCustomerId\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetCustomersAdmin($input: ListCustomersInputs!) {\n    getCustomersAdmin(input: $input) {\n      totalRows\n      offset\n      limit\n      results {\n        cellPhone\n        email\n        firstName\n        password\n        id\n        isActive\n        lastName\n        role\n        stripeCustomerId\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query searchCustomers($input: String!) {\n    searchCustomers(search: $input) {\n      message\n      results {\n        id\n        firstName\n        lastName\n        email\n      }\n      totalCount\n    }\n  }\n"): (typeof documents)["\n  query searchCustomers($input: String!) {\n    searchCustomers(search: $input) {\n      message\n      results {\n        id\n        firstName\n        lastName\n        email\n      }\n      totalCount\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

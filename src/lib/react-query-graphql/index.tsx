@@ -23,7 +23,6 @@ export function useGraphQLQuery<TResult, TVariables>(
 ) {
   return useQuery({
     ...queryOptions,
-    queryKey: [...queryOptions.queryKey, variables],
     queryFn: async () => {
       return await request(env.NEXT_PUBLIC_SERVER_GRAPHQL_URL, document, variables, requestHeaders)
     }

@@ -5,21 +5,22 @@ import { useState } from "react";
 import { channelKeys } from "./query-keys";
 
 const GET_CHANNELS_ADMIN_QUERY = graphql(`
-  query getAllChannelsWithPagination($input: ListChannelsInputs!) {
+  #graphql
+  query getAllChannelsWithPagination($input: ListChannelsInput!) {
     getAllChannelsWithPagination(input: $input) {
       limit
       offset
       totalRows
       results {
+        channelBackgroundImage
+        channelImage
         channelPrice
+        channelRules
         channelStatus
+        channelTitle
         channelsAbout
-        channelsBackgroundImage
-        channelsImage
-        channelsRule
-        channelsTitle
         idChannel
-        paidStatusEnum
+        isChannelPaid
         refIdModerator
       }
     }
@@ -56,7 +57,6 @@ const useGetChannels = (props: Props | undefined = { limit: 5 }) => {
       });
     },
   });
-
 
   const paginationParamsExtended = {
     ...paginationParams,
