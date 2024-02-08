@@ -5,7 +5,7 @@ import {
   type VariablesAndRequestHeadersArgs
 } from 'graphql-request/build/esm/types'
 import { graphQlRequestHandler, useGraphQLMutation, useGraphQLQuery } from '@/lib/react-query-graphql'
-import { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
 
 function useGraphQLQueryProtected<T, D>(...params: Parameters<typeof useGraphQLQuery<T, D>>) {
   const [queryOptions, document, variables] = params

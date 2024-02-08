@@ -23,7 +23,6 @@ export function useGraphQLQuery<TResult, TVariables>(
 ) {
   return useQuery({
     ...queryOptions,
-    queryKey: [...queryOptions.queryKey, variables],
     queryFn: async () => {
       return await request(env.NEXT_PUBLIC_SERVER_GRAPHQL_URL, document, variables, requestHeaders)
     }
@@ -36,15 +35,10 @@ export function useGraphQLMutation<
   TError = ClientError,
   TContext = unknown
 >(
-  mutationOptions: UseMutationOptions<
-    TResult,
-    TError,
-    VariablesAndRequestHeadersArgs<TVariables>,
-    TContext
-  >,
+  mutationOptions: UseMutationOptions<TResult, TError, VariablesAndRequestHeadersArgs<TVariables>, TContext>,
   document: TypedDocumentNode<TResult, TVariables>
 ) {
-  return useMutation<TResult, TError, VariablesAndRequestHeadersArgs<TVariables>, TContext>({
+  return useMutation({
     ...mutationOptions,
     mutationFn: async variables => {
       return await request(env.NEXT_PUBLIC_SERVER_GRAPHQL_URL, document, ...variables)
