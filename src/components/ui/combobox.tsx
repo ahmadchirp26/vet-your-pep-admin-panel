@@ -293,6 +293,7 @@ export default function Combobox<T>({
                 displayValue={(v) =>
                   v ? displayValue(v as SelectOption<T>) : ""
                 }
+                readOnly={disabled}
               />
               <ComboboxPrimitive.Button className="absolute right-4 top-3">
                 <RxChevronDown className="h-4 w-4" />

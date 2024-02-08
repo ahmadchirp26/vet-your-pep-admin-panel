@@ -7,21 +7,26 @@ import { channelKeys } from "./query-keys";
 const GET_CHANNELS_ADMIN_QUERY = graphql(`
   #graphql
   query getAllChannelsWithPagination($input: ListChannelsInput!) {
-    getAllChannelsWithPagination(input: $input) {
+    listChannels(input: $input) {
       limit
       offset
       totalRows
       results {
-        channelBackgroundImage
-        channelImage
-        channelPrice
-        channelRules
-        channelStatus
-        channelTitle
-        channelsAbout
-        idChannel
-        isChannelPaid
-        refIdModerator
+        id
+        backgroundImage
+        price
+        rules
+        status
+        title
+        about
+        isPaid
+        # moderator {
+        #   id
+        #   firstName
+        #   profileImage
+        #   lastName
+        #   email
+        # }
       }
     }
   }
@@ -60,7 +65,7 @@ const useGetChannels = (props: Props | undefined = { limit: 5 }) => {
 
   const paginationParamsExtended = {
     ...paginationParams,
-    totalRows: response.data?.getAllChannelsWithPagination.totalRows ?? 0,
+    totalRows: response.data?.listChannels.totalRows ?? 0,
   };
 
   return {

@@ -9,7 +9,7 @@ const LoginMutationDocument = graphql(`
     loginAsAdmin(input: $input) {
       accessToken
       user {
-        idAdminUser
+        id
         email
         firstName
         lastName

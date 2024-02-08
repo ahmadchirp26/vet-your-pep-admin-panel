@@ -6,9 +6,8 @@ export const routes = {
   channels:{
     list: '/channels',
     create: '/channels/create',
-    edit: '/channels/:id/edit',
-    view: '/channels/:id/view',
-    delete: '/channels/:id/delete',
+    edit: (id:string) => `/channels/${id}/edit`,
+    view: (id:string) => `/channels/${id}/view`,
   }
 
 

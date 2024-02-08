@@ -9,8 +9,6 @@ import Select from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { extractValuesAsEnum } from "@/utils/extract-values-as-enum";
 import SelectModerator from "./SelectModerator";
-import useCreateChannelMutation from "@/api/Channels/useCreateChannelMutation";
-import { type ChannelStatus } from "@/__generated__/graphql";
 
 // Channel Visibility Options
 const visibilityOptions = [
@@ -27,8 +25,8 @@ const visibilityOptions = [
 // form zod validation schema
 const channelFormSchema = z.object({
   title: z.string().min(1, { message: "Channel name is required" }),
-  about: z.string().min(1, { message: "Channel description is required" }),
-  rules: z.string().min(1, { message: "Channel rules is required" }),
+  about: z.string().optional().nullable(),
+  rules: z.string().optional().nullable(),
   visibility: z
     .enum(extractValuesAsEnum(visibilityOptions)),
   moderator: z
@@ -51,28 +49,16 @@ type ChannelFormTypes = z.infer<typeof channelFormSchema>;
 interface Props {
   id?: string;
   channel?: ChannelFormTypes;
+  readOnlyFields?:Array<keyof ChannelFormTypes>;
+  submitHandler:SubmitHandler<ChannelFormTypes>
 }
 // main channel form component for create and update channel
-export default function CreateChannel({ id, channel }: Props) {
-  const {mutate, status} = useCreateChannelMutation()
-
-  const onSubmit: SubmitHandler<ChannelFormTypes> = (data) => {
-    mutate({
-      input:{
-        channelTitle: data.title,
-        channelsAbout: data.about,
-        channelRules: data.rules,
-        channelStatus: data.visibility as ChannelStatus,
-        totalPrice: parseInt(data.price) ?? 0,
-        refIdModerator: data.moderator.id,
-      }
-    })
-  };
+export default function ChannelForm({ id,  channel,submitHandler, readOnlyFields=[] }: Props) {
 
   return (
     <Form<ChannelFormTypes>
       validationSchema={channelFormSchema}
-      onSubmit={onSubmit}
+      onSubmit={submitHandler}
       useFormProps={{
         defaultValues: {
           ...channel,
@@ -81,7 +67,7 @@ export default function CreateChannel({ id, channel }: Props) {
       }}
       className="isomorphic-form flex flex-grow flex-col @container"
     >
-      {({ register, control, formState: { errors } }) => (
+      {({ register, control, formState: { errors, isSubmitting }}) => (
         <>
         {console.log(errors)}
           <div className="flex-grow space-y-5 pb-10">
@@ -90,6 +76,8 @@ export default function CreateChannel({ id, channel }: Props) {
                 label="Title"
                 placeholder="Channel title"
                 {...register("title")}
+                readOnly={readOnlyFields.includes('title')}
+                disabled={readOnlyFields.includes('title')}
                 error={errors.title?.message}
               />
               <Input
@@ -98,6 +86,8 @@ export default function CreateChannel({ id, channel }: Props) {
                 error={errors?.price?.message}
                 prefix={"$"}
                 {...register("price")}
+                readOnly={readOnlyFields.includes('price')}
+                disabled={readOnlyFields.includes('price')}
               />
               <Controller
                 name="visibility"
@@ -112,6 +102,7 @@ export default function CreateChannel({ id, channel }: Props) {
                     error={errors?.visibility?.message}
                     getOptionValue={(option) => option.value}
                     getOptionDisplayValue={(option) => option.name}
+                    disabled={readOnlyFields.includes('visibility')}
                     displayValue={(value) => {
                       const option = visibilityOptions.find(
                         (option) => option.value === value
@@ -132,6 +123,7 @@ export default function CreateChannel({ id, channel }: Props) {
                     value={value}
                     error={errors?.moderator?.message}
                     isRequired={true}
+                    disabled={readOnlyFields.includes('moderator')}
                   />
                 )}
               />
@@ -141,6 +133,8 @@ export default function CreateChannel({ id, channel }: Props) {
                 label="Description"
                 placeholder="Enter your channel description"
                 {...register("about")}
+                disabled={readOnlyFields.includes('about')}
+                readOnly={readOnlyFields.includes('about')}
                 error={errors.about?.message}
                 textareaClassName="h-20"
                 className="col-span-2"
@@ -151,6 +145,8 @@ export default function CreateChannel({ id, channel }: Props) {
                 label="Rules"
                 placeholder="Enter your channel rules"
                 {...register("rules")}
+                disabled={readOnlyFields.includes('rules')}
+                readOnly={readOnlyFields.includes('rules')}
                 error={errors.about?.message}
                 textareaClassName="h-20"
                 className="col-span-2"
@@ -165,7 +161,7 @@ export default function CreateChannel({ id, channel }: Props) {
           >
             <Button
               type="submit"
-              isLoading={status === 'pending'}
+              isLoading={isSubmitting}
               className="w-full @xl:w-auto dark:bg-gray-100 dark:text-white dark:active:bg-gray-100"
             >
               {id ? "Update" : "Create"} Channel

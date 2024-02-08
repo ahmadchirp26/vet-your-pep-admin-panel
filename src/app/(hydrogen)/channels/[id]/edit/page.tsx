@@ -1,9 +1,9 @@
 import { routes } from "@/config/routes";
 import PageHeader from "@/app/shared/page-header";
-import CreateChannel from "@/app/shared/channels/create-channel";
+import EditChannel from "@/app/shared/channels/edit-channel";
 
 const pageHeader = {
-  title: "Create Channel",
+  title: "Edit Channel",
   breadcrumb: [
     {
       name: "Dashboard",
@@ -13,16 +13,16 @@ const pageHeader = {
       name: "Channel List",
     },
     {
-      name: "Create",
+      name: "Edit",
     },
   ],
 };
 
-export default function CreateChannelPage() {
+export default function EditChannelPage({params}: { params:{id: string} }) {
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-      <CreateChannel />
+      <EditChannel id={params.id} />
     </>
   );
 }

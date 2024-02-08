@@ -11,12 +11,13 @@ import { Text } from '@/components/ui/text';
 import { PiTextColumns } from 'react-icons/pi';
 
 import cn from '@/utils/class-names';
+import { type ColumnType } from 'rc-table/lib/interface';
 
 export type ExtractProps<T> = T extends React.ComponentType<infer P> ? P : T;
 
 const classes = {
   table:
-    '[&_.rc-table-content]:overflow-x-auto [&_table]:w-full [&_.rc-table-row:hover]:bg-gray-50 [&_.rc-table-row-expand-icon-cell]:w-14',
+    '[&_.rc-table-content]:overflow-x-auto [&_table]:!w-auto [&_.rc-table-row:hover]:bg-gray-50 [&_.rc-table-row-expand-icon-cell]:w-14',
   thead:
     '[&_thead]:text-left [&_thead]:rtl:text-right [&_th.rc-table-cell]:uppercase [&_th.rc-table-cell]:text-xs [&_th.rc-table-cell]:font-semibold [&_th.rc-table-cell]:tracking-wider [&_th.rc-table-cell]:text-gray-500',
   tCell:
@@ -73,7 +74,7 @@ export default function Table({
         className
       )}
       emptyText={
-        emptyText || (
+        emptyText ?? (
           <div className="py-5 text-center lg:py-8">
             <Empty /> <Text className="mt-3">No Data</Text>
           </div>
@@ -174,7 +175,7 @@ export function HeaderCell({
 }
 
 type ToggleColumnsTypes<T> = {
-  columns: T[];
+  columns: ColumnType<T>[];
   checkedColumns: string[];
   setCheckedColumns: React.Dispatch<React.SetStateAction<string[]>>;
   hideIndex?: number;
@@ -199,11 +200,11 @@ export function ToggleColumns<T>({
               setValues={setCheckedColumns}
               className="grid grid-cols-2 gap-x-6 gap-y-5 px-1.5 pb-3.5 pt-4"
             >
-              {columns.map((column: any, index) => (
+              {columns.map((column, index) => (
                 <Checkbox
-                  key={column.dataIndex}
-                  value={column.dataIndex}
-                  label={addSpacesToCamelCase(column.dataIndex)}
+                  key={index}
+                  value={typeof column.dataIndex === 'string' ? column.dataIndex : ''}
+                  label={addSpacesToCamelCase(typeof column.dataIndex === 'string' ? column.dataIndex : '')}
                   labelClassName="ml-2 rtl:mr-2 text-[13px] font-medium"
                   containerClassName="cursor-pointer capitalize"
                   className={cn(

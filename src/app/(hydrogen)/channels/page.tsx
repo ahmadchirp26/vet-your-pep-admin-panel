@@ -45,7 +45,7 @@ export default function UsersPage() {
         </Link>
       </PageHeader>
       <ChannelsTable
-        data={data.getAllChannelsWithPagination.results}
+        data={data?.listChannels?.results}
         remotePagination={pageParams}
         remoteSearch={{
           searchTerm: filters.searchQuery ?? "",
