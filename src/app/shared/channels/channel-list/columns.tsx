@@ -85,7 +85,7 @@ export const getColumns = ({
       <div className="flex items-center justify-end gap-3 pe-4">
         <Tooltip
           size="sm"
-          content={() => "Edit Order"}
+          content={() => "Edit Channel"}
           placement="top"
           color="invert"
         >
@@ -94,7 +94,7 @@ export const getColumns = ({
               tag="span"
               size="sm"
               variant="outline"
-              aria-label={"Edit Order"}
+              aria-label={"Edit Channel"}
               className="hover:text-gray-700"
             >
               <PencilIcon className="h-4 w-4" />
