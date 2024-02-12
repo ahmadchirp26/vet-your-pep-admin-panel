@@ -29,8 +29,8 @@ export default function Sidebar({ className }: { className?: string }) {
       <SimpleBar className="h-[calc(100%-80px)]">
         <div className="mt-4 pb-3 3xl:mt-6">
           {menuItems.map((item, index) => {
-            const isActive = pathname === (item?.href as string);
-            const pathnameExistInDropdowns: any = item?.dropdownItems?.filter(
+            const isActive = pathname === (item?.href);
+            const pathnameExistInDropdowns = item?.dropdownItems?.filter(
               (dropdownItem) => dropdownItem.href === pathname
             );
             const isDropdownOpen = Boolean(pathnameExistInDropdowns?.length);
@@ -80,7 +80,7 @@ export default function Sidebar({ className }: { className?: string }) {
                       >
                         {item?.dropdownItems?.map((dropdownItem, index) => {
                           const isChildActive =
-                            pathname === (dropdownItem?.href as string);
+                            pathname === (dropdownItem?.href);
 
                           return (
                             <Link

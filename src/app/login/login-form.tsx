@@ -8,7 +8,7 @@ import { Password } from "@/components/ui/password";
 import * as z from "zod";
 import { useState } from "react";
 import { PiArrowRightBold } from "react-icons/pi";
-import { SubmitHandler } from "react-hook-form";
+import { type SubmitHandler } from "react-hook-form";
 import { useLoginMutation } from "@/api/Authentication/useLoginMutation";
 
 const loginSchema = z.object({
@@ -27,11 +27,11 @@ const initialValues: Login = {
 
 export default function LoginInForm() {
   //TODO: why we need to reset it here
-  const [reset, setReset] = useState({});
+  const [reset] = useState({});
   const { mutateAsync } = useLoginMutation();
 
   const onSubmit: SubmitHandler<Login> = async (data) => {
-    const { remember, ...rest } = data;
+    const { ...rest } = data;
 
     console.log(data);
     await mutateAsync([
