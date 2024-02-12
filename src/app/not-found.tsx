@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Link from 'next/link';
 import Image from 'next/image';
 import { Text } from '@/components/ui/text';

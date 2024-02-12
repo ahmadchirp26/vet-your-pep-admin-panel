@@ -25,8 +25,8 @@ export function useElementSize<T extends HTMLElement = HTMLDivElement>(): [
   // Prevent too many rendering using useCallback
   const handleSize = useCallback(() => {
     setSize({
-      width: ref?.offsetWidth || 0,
-      height: ref?.offsetHeight || 0,
+      width: ref?.offsetWidth ?? 0,
+      height: ref?.offsetHeight ?? 0,
     });
   }, [ref?.offsetHeight, ref?.offsetWidth]);
 
