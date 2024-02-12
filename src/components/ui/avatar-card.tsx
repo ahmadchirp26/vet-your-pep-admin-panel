@@ -1,6 +1,6 @@
 import cn from '@/utils/class-names';
 import { Text } from '@/components/ui/text';
-import { Avatar, AvatarProps } from '@/components/ui/avatar';
+import { Avatar, type AvatarProps } from '@/components/ui/avatar';
 
 interface AvatarCardProps {
   src: string;

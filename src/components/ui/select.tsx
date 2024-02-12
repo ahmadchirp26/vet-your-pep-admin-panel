@@ -5,7 +5,7 @@ import isNumber from 'lodash/isNumber';
 import isString from 'lodash/isString';
 import { FieldHelperText } from 'rizzui';
 import { Listbox, Transition } from '@headlessui/react';
-import { ExtractProps } from '@/components/ui/table';
+import { type ExtractProps } from '@/components/ui/table';
 import cn from '@/utils/class-names';
 import { PiCaretUpDown } from 'react-icons/pi';
 import { FieldError } from '@/components/ui/field-error';

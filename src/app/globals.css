@@ -719,7 +719,7 @@ td.rc-table-cell-fix-right {
   .rdw-editor-toolbar
   > div
   > .rdw-option-wrapper {
-  @apply h-9 w-10 w-9 border-0 border-r border-gray-100 last:border-r-0 hover:bg-gray-50 hover:shadow-none @lg:m-0;
+  @apply h-9 w-9 border-0 border-r border-gray-100 last:border-r-0 hover:bg-gray-50 hover:shadow-none @lg:m-0;
 }
 
 .text_editor
