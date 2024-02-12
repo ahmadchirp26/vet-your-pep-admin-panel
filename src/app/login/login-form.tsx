@@ -31,7 +31,7 @@ export default function LoginInForm() {
   const { mutateAsync } = useLoginMutation();
 
   const onSubmit: SubmitHandler<Login> = async (data) => {
-    const { ...rest } = data;
+    const {remember, ...rest } = data;
 
     console.log(data);
     await mutateAsync([
