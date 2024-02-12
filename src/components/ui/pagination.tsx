@@ -94,7 +94,7 @@ const PrevIcon = ({ icon, rounded, outline, className }: IconProps) => (
       className
     )}
   >
-    {icon || (
+    {icon ?? (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -122,7 +122,7 @@ const NextIcon = ({ icon, rounded, outline, className }: IconProps) => (
       className
     )}
   >
-    {icon || (
+    {icon ?? (
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -151,7 +151,7 @@ const JumpPrevIcon = ({ icon, rounded, outline, className }: IconProps) => (
       className
     )}
   >
-    {icon || '•••'}
+    {icon ?? '•••'}
   </div>
 );
 
@@ -165,7 +165,7 @@ const JumpNextIcon = ({ icon, rounded, outline, className }: IconProps) => (
       className
     )}
   >
-    {icon || '•••'}
+    {icon ?? '•••'}
   </div>
 );
 
@@ -225,13 +225,13 @@ export default function Pagination({
 }: PaginationProps) {
   return (
     <RcPagination
-      locale={locale || localeDefault}
+      locale={locale ?? localeDefault}
       nextIcon={
         <NextIcon
           icon={nextIcon as React.ReactNode}
           rounded={rounded}
           outline={outline}
-          className={nextIconClassName as string}
+          className={nextIconClassName!}
         />
       }
       prevIcon={
@@ -239,7 +239,7 @@ export default function Pagination({
           icon={prevIcon as React.ReactNode}
           rounded={rounded}
           outline={outline}
-          className={prevIconClassName as string}
+          className={prevIconClassName!}
         />
       }
       jumpPrevIcon={
@@ -247,7 +247,7 @@ export default function Pagination({
           icon={jumpPrevIcon as React.ReactNode}
           rounded={rounded}
           outline={outline}
-          className={jumpPrevIconClassName as string}
+          className={jumpPrevIconClassName!}
         />
       }
       jumpNextIcon={
@@ -255,7 +255,7 @@ export default function Pagination({
           icon={jumpNextIcon as React.ReactNode}
           rounded={rounded}
           outline={outline}
-          className={jumpNextIconClassName as string}
+          className={jumpNextIconClassName!}
         />
       }
       className={cn(
