@@ -7,7 +7,7 @@ import { type APIGetChannelsData } from "@/api/Channels";
 import { type ColumnType, type DefaultRecordType } from "rc-table/lib/interface";
 
 type Props = {
-  data: NonNullable<APIGetChannelsData>["listChannels"]["results"];
+  data: NonNullable<APIGetChannelsData>["getChannels"]["results"];
   remoteSearch: {
     searchTerm: string;
     onSearchChange: (value?: string) => void;

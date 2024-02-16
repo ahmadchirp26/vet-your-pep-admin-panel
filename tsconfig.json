@@ -34,7 +34,8 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".next/types/**/*.ts"
-, "src/lib/react-query-graphql/codegen.ts"  ],
-  "exclude": ["node_modules"]
+    ".next/types/**/*.ts",
+    "src/lib/react-query-graphql/codegen.ts"
+  ],
+  "exclude": ["node_modules", "src/__generated__"]
 }

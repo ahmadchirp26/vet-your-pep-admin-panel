@@ -13,7 +13,7 @@ import Link from "next/link";
 import { routes } from "@/config/routes";
 import { type APIGetChannelsData } from "@/api/Channels";
 
-type ChannelsData = NonNullable<APIGetChannelsData>["listChannels"]["results"];
+type ChannelsData = NonNullable<APIGetChannelsData>["getChannels"]["results"];
 
 interface Props {
   onDeleteItem: (id: string) => void;

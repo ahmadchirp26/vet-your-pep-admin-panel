@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type ResultOf, type DocumentTypeDecoration, type TypedDocumentNode } from '@graphql-typed-document-node/core';
-import { type FragmentDefinitionNode } from 'graphql';
-import { type Incremental } from './graphql';
+import { ResultOf, DocumentTypeDecoration, TypedDocumentNode } from '@graphql-typed-document-node/core';
+import { FragmentDefinitionNode } from 'graphql';
+import { Incremental } from './graphql';
 
 
 export type FragmentType<TDocumentType extends DocumentTypeDecoration<any, any>> = TDocumentType extends DocumentTypeDecoration<
@@ -64,9 +62,6 @@ export function isFragmentReady<TQuery, TFrag>(
   const fragDef = fragmentNode.definitions[0] as FragmentDefinitionNode | undefined;
   const fragName = fragDef?.name?.value;
 
-  const fields = (fragName && deferredFields[fragName]) ?? [];
-  
-  return fields.length > 0 
-  //@ts-expect-error @ts-ignore
-  && fields.every((field: string) => data && field in data);
+  const fields = (fragName && deferredFields[fragName]) || [];
+  return fields.length > 0 && fields.every(field => data && field in data);
 }
