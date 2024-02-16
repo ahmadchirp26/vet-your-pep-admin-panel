@@ -6,7 +6,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
+    "check-types": "tsc --noemit",
+    "lint": "npm run check-types && next lint",
     "start": "next start",
     "graphqlCodegen--watch": "npx graphql-code-generator --config ./src/lib/react-query-graphql/codegen.ts --watch"
   },
