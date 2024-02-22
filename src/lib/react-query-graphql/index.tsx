@@ -52,4 +52,14 @@ export const graphQlRequestHandler = <TResult, TVariables>(
   requestHeaders?: GraphQLClientRequestHeaders
 ) => request(env.NEXT_PUBLIC_SERVER_GRAPHQL_URL, document, variables, requestHeaders)
 
+export async function requestGraphQl<TResult, TVariables extends Variables>(
+  document: TypedDocumentNode<TResult, TVariables>,
+  variables: VariablesAndRequestHeadersArgs<TVariables>,
+) {
+  return await request(
+    env.NEXT_PUBLIC_SERVER_GRAPHQL_URL,
+    document,
+    ...variables,
+  );
+}
 export { graphql }

@@ -1,6 +1,8 @@
 import { routes } from "@/config/routes";
 import PageHeader from "@/app/shared/page-header";
 import EditChannel from "@/app/shared/channels/edit-channel";
+import { getSessionServerAction } from "@/lib/Authentication/server-actions/getSessionServerAction";
+import { redirect } from "next/navigation";
 
 const pageHeader = {
   title: "Edit Channel",
@@ -18,11 +20,19 @@ const pageHeader = {
   ],
 };
 
-export default function EditChannelPage({params}: { params:{id: string} }) {
+export default async function EditChannelPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const data = await getSessionServerAction();
+  if (!data) {
+    return redirect("/login");
+  }
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-      <EditChannel id={params.id} />
+      <EditChannel accessToken={data.accessToken} id={params.id} />
     </>
   );
 }

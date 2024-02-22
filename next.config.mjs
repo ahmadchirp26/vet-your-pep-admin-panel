@@ -1,4 +1,5 @@
-const env = await import("./src/env.mjs");
+import {env} from './src/env.mjs';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // skipTrailingSlashRedirect: true,
@@ -54,14 +55,18 @@ const nextConfig = {
         // pathname: '/u/**',
       },
       {
-        hostname: env.env.NEXT_PUBLIC_AWS_S3_FILE_HOST,
-        protocol: "https",
-      },
-      {
         protocol: "https",
         hostname: "s3.amazonaws.com",
         pathname: "/redqteam.com/isomorphic-furyroad/public/**",
       },
+      {
+        hostname: env.NEXT_PUBLIC_AWS_S3_FILE_HOST,
+        protocol: "https",
+      },
+      {
+        hostname:'placehold.co',
+        protocol: "https",
+      }
     ],
   },
 };
