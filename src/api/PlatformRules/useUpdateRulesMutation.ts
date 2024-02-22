@@ -3,15 +3,21 @@ import { graphql } from "@/lib/react-query-graphql";
 
 const UPDATE_RULES_MUTATION = graphql(`
   #graphql
-  mutation updateChannel($input: UpdateChannelInput!) {
-    updateChannel(input: $input) {
-      message
-      success
+  mutation UpdatePlatFormRule($input: UpdatePlatFormRulesInput!) {
+    updatePlatFormRule(input: $input) {
+        createdBy
+        createdDate
+        id
+        rules
+        title
+        updatedBy
+        updatedDate
     }
-  }
+}
+
 `);
 
-const useUpdateChannelMutation = () =>
+const useUpdateRulesMutation = () =>
   useGraphQLMutationProtected({}, UPDATE_RULES_MUTATION);
 
-export default useUpdateChannelMutation;
+export default useUpdateRulesMutation;

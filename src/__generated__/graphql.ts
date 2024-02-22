@@ -334,6 +334,7 @@ export type ListPlatFormRulesResponse = {
 };
 
 export type ListPostsInput = {
+  channelId?: InputMaybe<Scalars['String']['input']>;
   customerId?: InputMaybe<Scalars['String']['input']>;
   filter?: InputMaybe<PostFilterInputs>;
   limit: Scalars['Float']['input'];
@@ -380,10 +381,12 @@ export type Mutation = {
   createPost: SuccessResponse;
   /** This will follow a customer */
   followCustomer: SuccessResponse;
-  /** This will create new Channel */
+  /** To Join new Channel */
   joinChannel: SuccessResponse;
+  /** This will create new Channel */
+  leaveChannel: SuccessResponse;
   /** This will create new Like on Post */
-  likePost: SuccessResponse;
+  likePost: Likes;
   /** Admin Login */
   loginAsAdmin: AdminLoginResponse;
   /** Customer Login */
@@ -395,14 +398,14 @@ export type Mutation = {
   /** This will unfollow a customer */
   unfollowCustomer: SuccessResponse;
   /** This will unlike Post */
-  unlikePost: SuccessResponse;
+  unlikePost: Likes;
   /** Update admin data */
   updateAdminData: Scalars['String']['output'];
   /** Update admin email */
   updateAdminEmail: AdminEmailUpdateResponse;
   /** This will update Admin Password */
   updateAdminPassword: SuccessResponse;
-  /** This will create new Channel */
+  /** This will update Channel */
   updateChannel: SuccessResponse;
   /** This will update new Comment */
   updateComment: SuccessResponse;
@@ -468,6 +471,11 @@ export type MutationFollowCustomerArgs = {
 
 export type MutationJoinChannelArgs = {
   channelId: Scalars['String']['input'];
+};
+
+
+export type MutationLeaveChannelArgs = {
+  input: UpdateChannelInput;
 };
 
 
@@ -617,7 +625,7 @@ export type PostFilterInputs = {
 
 export type Query = {
   __typename?: 'Query';
-  /** This will create get a Channel */
+  /** To get a Channel */
   getChannelById: Channel;
   /** Get S3 bucket Signed Url */
   getChannelUploadUrl: S3SignedUrlResponse;
@@ -633,6 +641,8 @@ export type Query = {
   getCustomerUploadUrl: S3SignedUrlResponse;
   /** The List of Customers with Pagination and filters */
   getCustomersAdmin: ListCustomersResponse;
+  /** To get a an event */
+  getEventById: Events;
   /** Get S3 bucket Signed Url */
   getEventUploadUrls: Array<S3SignedUrlResponse>;
   /** The List of events with Pagination and filters */
@@ -647,6 +657,8 @@ export type Query = {
   getOtherCustomerData: OtherCustomerDataResponse;
   /** The List of PlatForm rules Pagination and filters */
   getPlatFormRules: ListPlatFormRulesResponse;
+  /** To get a platform rules */
+  getPlatFormRulesById: PlatFormRules;
   /** Get S3 bucket Signed Url */
   getPostUploadUrls: Array<S3SignedUrlResponse>;
   /** The List of posts with Pagination and filters */
@@ -675,6 +687,11 @@ export type QueryGetCommentsArgs = {
 
 export type QueryGetCustomersAdminArgs = {
   input: ListCustomersInputs;
+};
+
+
+export type QueryGetEventByIdArgs = {
+  input: Scalars['String']['input'];
 };
 
 
@@ -710,6 +727,11 @@ export type QueryGetOtherCustomerDataArgs = {
 
 export type QueryGetPlatFormRulesArgs = {
   input: ListPlatFormRulesInput;
+};
+
+
+export type QueryGetPlatFormRulesByIdArgs = {
+  input: Scalars['String']['input'];
 };
 
 
@@ -882,12 +904,26 @@ export type CreatePlatFormRuleMutationVariables = Exact<{
 
 export type CreatePlatFormRuleMutation = { __typename?: 'Mutation', createPlatFormRule: { __typename?: 'PlatFormRules', createdBy?: string | null, createdDate?: any | null, id: string, rules: string, title: string, updatedBy?: string | null, updatedDate?: any | null } };
 
+export type GetPlatFormRulesByIdQueryVariables = Exact<{
+  input: Scalars['String']['input'];
+}>;
+
+
+export type GetPlatFormRulesByIdQuery = { __typename?: 'Query', getPlatFormRulesById: { __typename?: 'PlatFormRules', createdBy?: string | null, createdDate?: any | null, id: string, rules: string, title: string, updatedBy?: string | null, updatedDate?: any | null } };
+
 export type GetPlatFormRulesQueryVariables = Exact<{
   input: ListPlatFormRulesInput;
 }>;
 
 
 export type GetPlatFormRulesQuery = { __typename?: 'Query', getPlatFormRules: { __typename?: 'ListPlatFormRulesResponse', limit: number, offset?: number | null, totalRows?: number | null, results: Array<{ __typename?: 'PlatFormRules', createdBy?: string | null, createdDate?: any | null, id: string, rules: string, title: string, updatedBy?: string | null, updatedDate?: any | null }> } };
+
+export type UpdatePlatFormRuleMutationVariables = Exact<{
+  input: UpdatePlatFormRulesInput;
+}>;
+
+
+export type UpdatePlatFormRuleMutation = { __typename?: 'Mutation', updatePlatFormRule: { __typename?: 'PlatFormRules', createdBy?: string | null, createdDate?: any | null, id: string, rules: string, title: string, updatedBy?: string | null, updatedDate?: any | null } };
 
 
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LoginAdminInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"loginAsAdmin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
@@ -898,4 +934,6 @@ export const UpdateChannelDocument = {"kind":"Document","definitions":[{"kind":"
 export const GetCustomersAdminDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCustomersAdmin"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ListCustomersInputs"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getCustomersAdmin"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalRows"}},{"kind":"Field","name":{"kind":"Name","value":"offset"}},{"kind":"Field","name":{"kind":"Name","value":"limit"}},{"kind":"Field","name":{"kind":"Name","value":"results"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cellPhone"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isActive"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"stripeCustomerId"}}]}}]}}]}}]} as unknown as DocumentNode<GetCustomersAdminQuery, GetCustomersAdminQueryVariables>;
 export const SearchCustomersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"searchCustomers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"searchCustomers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"results"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<SearchCustomersQuery, SearchCustomersQueryVariables>;
 export const CreatePlatFormRuleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreatePlatFormRule"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreatePlatFormRulesInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createPlatFormRule"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdDate"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rules"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"updatedDate"}}]}}]}}]} as unknown as DocumentNode<CreatePlatFormRuleMutation, CreatePlatFormRuleMutationVariables>;
+export const GetPlatFormRulesByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlatFormRulesById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPlatFormRulesById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdDate"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rules"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"updatedDate"}}]}}]}}]} as unknown as DocumentNode<GetPlatFormRulesByIdQuery, GetPlatFormRulesByIdQueryVariables>;
 export const GetPlatFormRulesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlatFormRules"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ListPlatFormRulesInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPlatFormRules"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"limit"}},{"kind":"Field","name":{"kind":"Name","value":"offset"}},{"kind":"Field","name":{"kind":"Name","value":"totalRows"}},{"kind":"Field","name":{"kind":"Name","value":"results"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdDate"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rules"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"updatedDate"}}]}}]}}]}}]} as unknown as DocumentNode<GetPlatFormRulesQuery, GetPlatFormRulesQueryVariables>;
+export const UpdatePlatFormRuleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdatePlatFormRule"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdatePlatFormRulesInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updatePlatFormRule"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdDate"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"rules"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"updatedBy"}},{"kind":"Field","name":{"kind":"Name","value":"updatedDate"}}]}}]}}]} as unknown as DocumentNode<UpdatePlatFormRuleMutation, UpdatePlatFormRuleMutationVariables>;

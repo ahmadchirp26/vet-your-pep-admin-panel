@@ -50,7 +50,7 @@ export default function RuleForm({ id, rule, submitHandler }: Props) {
             <div>
               <Textarea
                 label="Rules"
-                placeholder="Enter your channel rules"
+                placeholder="Enter platform rules"
                 {...register("rules")}
                 error={errors.rules?.message}
                 textareaClassName="h-20"

@@ -11,4 +11,5 @@ export const rulesKeys = {
     [...rulesKeys.all, "lists", filters] as const,
   search: (query: { q?: string }) =>
     [...rulesKeys.all, "search", query] as const,
+  get: (id: string) => [...rulesKeys.all, id] as const,
 };

@@ -21,7 +21,9 @@ const documents = {
     "\n  query GetCustomersAdmin($input: ListCustomersInputs!) {\n    getCustomersAdmin(input: $input) {\n      totalRows\n      offset\n      limit\n      results {\n        cellPhone\n        email\n        firstName\n        password\n        id\n        isActive\n        lastName\n        # role\n        stripeCustomerId\n      }\n    }\n  }\n": types.GetCustomersAdminDocument,
     "\n  query searchCustomers($input: String!) {\n    searchCustomers(search: $input) {\n      message\n      results {\n        id\n        firstName\n        lastName\n        email\n      }\n      totalCount\n    }\n  }\n": types.SearchCustomersDocument,
     "\n  mutation CreatePlatFormRule($input: CreatePlatFormRulesInput!) {\n    createPlatFormRule(input: $input) {\n      createdBy\n      createdDate\n      id\n      rules\n      title\n      updatedBy\n      updatedDate\n    }\n  }\n": types.CreatePlatFormRuleDocument,
+    "\n  query GetPlatFormRulesById($input: String!) {\n    getPlatFormRulesById(input: $input) {\n      createdBy\n      createdDate\n      id\n      rules\n      title\n      updatedBy\n      updatedDate\n    }\n  }\n": types.GetPlatFormRulesByIdDocument,
     "\n  query GetPlatFormRules($input: ListPlatFormRulesInput!) {\n    getPlatFormRules(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        createdBy\n        createdDate\n        id\n        rules\n        title\n        updatedBy\n        updatedDate\n      }\n    }\n  }\n": types.GetPlatFormRulesDocument,
+    "\n  #graphql\n  mutation UpdatePlatFormRule($input: UpdatePlatFormRulesInput!) {\n    updatePlatFormRule(input: $input) {\n        createdBy\n        createdDate\n        id\n        rules\n        title\n        updatedBy\n        updatedDate\n    }\n}\n\n": types.UpdatePlatFormRuleDocument,
 };
 
 /**
@@ -73,7 +75,15 @@ export function graphql(source: "\n  mutation CreatePlatFormRule($input: CreateP
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n  query GetPlatFormRulesById($input: String!) {\n    getPlatFormRulesById(input: $input) {\n      createdBy\n      createdDate\n      id\n      rules\n      title\n      updatedBy\n      updatedDate\n    }\n  }\n"): (typeof documents)["\n  query GetPlatFormRulesById($input: String!) {\n    getPlatFormRulesById(input: $input) {\n      createdBy\n      createdDate\n      id\n      rules\n      title\n      updatedBy\n      updatedDate\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query GetPlatFormRules($input: ListPlatFormRulesInput!) {\n    getPlatFormRules(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        createdBy\n        createdDate\n        id\n        rules\n        title\n        updatedBy\n        updatedDate\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPlatFormRules($input: ListPlatFormRulesInput!) {\n    getPlatFormRules(input: $input) {\n      limit\n      offset\n      totalRows\n      results {\n        createdBy\n        createdDate\n        id\n        rules\n        title\n        updatedBy\n        updatedDate\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  #graphql\n  mutation UpdatePlatFormRule($input: UpdatePlatFormRulesInput!) {\n    updatePlatFormRule(input: $input) {\n        createdBy\n        createdDate\n        id\n        rules\n        title\n        updatedBy\n        updatedDate\n    }\n}\n\n"): (typeof documents)["\n  #graphql\n  mutation UpdatePlatFormRule($input: UpdatePlatFormRulesInput!) {\n    updatePlatFormRule(input: $input) {\n        createdBy\n        createdDate\n        id\n        rules\n        title\n        updatedBy\n        updatedDate\n    }\n}\n\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
