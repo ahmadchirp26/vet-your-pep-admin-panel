@@ -1,6 +1,8 @@
 "use client";
 import React from "react";
-import useGetChannel from "@/api/Channels/useGetChannel";
+
+import { useRouter } from "next/navigation";
+import { routes } from "@/config/routes";
 import toast from "react-hot-toast";
 import useGetRulesById from "@/api/PlatformRules/useGetPlatformRules";
 import useUpdateRulesMutation from "@/api/PlatformRules/useUpdateRulesMutation";
@@ -15,6 +17,7 @@ const EditRules = ({ id }: Props) => {
     id,
   });
   const { mutateAsync } = useUpdateRulesMutation();
+  const router = useRouter();
 
   if (status === "pending") {
     return "Loading...";
@@ -39,6 +42,7 @@ const EditRules = ({ id }: Props) => {
             },
           });
           toast.success("Rules updated successfully");
+          router.push(routes.rules.list);
         } catch (e) {
           toast.error("Error updating Rules");
         }
