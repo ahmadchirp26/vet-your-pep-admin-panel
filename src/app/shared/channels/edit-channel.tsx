@@ -4,12 +4,15 @@ import React from "react";
 import ChannelForm from "./channel-form";
 import useGetChannel from "@/api/Channels/useGetChannel";
 import toast from "react-hot-toast";
+import S3UploadHandlerMutationFn from "@/api/S3UploadHandlerMutationFn";
+import { type FileSchema } from "@/lib/zod-schemas/attachment";
 
 type Props = {
   id: string;
+  accessToken: string;
 };
 
-const EditChannel = ({ id }: Props) => {
+const EditChannel = ({ id, accessToken }: Props) => {
   const { data, status } = useGetChannel({
     id,
   });
@@ -28,6 +31,10 @@ const EditChannel = ({ id }: Props) => {
         title: data?.getChannelById.title,
         about: data?.getChannelById.about,
         rules: data?.getChannelById.rules,
+        media: {
+          image: data?.getChannelById.image,
+          bannerImage: data?.getChannelById.backgroundImage,
+        },
         moderator: {
           id: data?.getChannelById.moderator.id,
           firstName: data?.getChannelById.moderator.firstName,
@@ -40,19 +47,34 @@ const EditChannel = ({ id }: Props) => {
       readOnlyFields={["moderator", "visibility", "price"]}
       submitHandler={async (data) => {
         try {
+          const filesToBeUploaded = [
+            data.media.image && typeof data.media.image !== "string"
+              ? { ...data.media.image, id: "media" }
+              : undefined,
+            data.media.bannerImage && typeof data.media.bannerImage !== "string"
+              ? { ...data.media.bannerImage, id: "banner" }
+              : undefined,
+          ].filter(Boolean) as FileSchema[];
+
+          const [profileImage, bannerImage] =
+            filesToBeUploaded.length > 0
+              ? await S3UploadHandlerMutationFn(filesToBeUploaded, accessToken)
+              : [undefined, undefined];
+
           await mutateAsync({
             input: {
               id: id,
               title: data.title,
               about: data.about,
               rules: data.rules,
+              backgroundImage: bannerImage?.uploadedURL,
+              image: profileImage?.uploadedURL,
             },
           });
           toast.success("Channel updated successfully");
-        }catch(e) {
-          toast.error("Error updating channel")
+        } catch (e) {
+          toast.error("Error updating channel");
         }
-
       }}
     />
   );

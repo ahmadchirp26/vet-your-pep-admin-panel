@@ -1,6 +1,8 @@
 import { routes } from "@/config/routes";
 import PageHeader from "@/app/shared/page-header";
 import CreateChannel from "@/app/shared/channels/create-channel";
+import { getSessionServerAction } from "@/lib/Authentication/server-actions/getSessionServerAction";
+import { redirect } from "next/navigation";
 
 const pageHeader = {
   title: "Create Channel",
@@ -18,11 +20,15 @@ const pageHeader = {
   ],
 };
 
-export default function CreateChannelPage() {
+export default async function CreateChannelPage() {
+  const data = await getSessionServerAction();
+  if (!data) {
+    return redirect("/login");
+  }
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb} />
-      <CreateChannel />
+      <CreateChannel  accessToken={data.accessToken} />
     </>
   );
 }

@@ -9,6 +9,9 @@ import Select from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { extractValuesAsEnum } from "@/utils/extract-values-as-enum";
 import SelectModerator from "./SelectModerator";
+import BannerForm from "./BannerForm";
+import AttachmentSchema from "@/lib/zod-schemas/attachment";
+import { FieldError } from "@/components/ui/field-error";
 
 // Channel Visibility Options
 const visibilityOptions = [
@@ -27,19 +30,23 @@ const channelFormSchema = z.object({
   title: z.string().min(1, { message: "Channel name is required" }),
   about: z.string().optional().nullable(),
   rules: z.string().optional().nullable(),
-  visibility: z
-    .enum(extractValuesAsEnum(visibilityOptions)),
-  moderator: z
-    .object({
+  media: z.object({
+    image: AttachmentSchema.optional().nullable(),
+    bannerImage: AttachmentSchema.optional().nullable(),
+  }),
+  visibility: z.enum(extractValuesAsEnum(visibilityOptions)),
+  moderator: z.object(
+    {
       id: z.string(),
       firstName: z.string(),
       lastName: z.string(),
       email: z.string(),
-
-    }, {
+    },
+    {
       //Todo: Document this way of making custom error messages
-      required_error : "Channel moderator is required"
-    }),
+      required_error: "Channel moderator is required",
+    },
+  ),
   price: z.string().min(1, { message: "Channel price is required" }),
 });
 
@@ -49,35 +56,78 @@ type ChannelFormTypes = z.infer<typeof channelFormSchema>;
 interface Props {
   id?: string;
   channel?: ChannelFormTypes;
-  readOnlyFields?:Array<keyof ChannelFormTypes>;
-  submitHandler:SubmitHandler<ChannelFormTypes>
+  readOnlyFields?: Array<keyof ChannelFormTypes>;
+  submitHandler: SubmitHandler<ChannelFormTypes>;
 }
 // main channel form component for create and update channel
-export default function ChannelForm({ id,  channel,submitHandler, readOnlyFields=[] }: Props) {
-
+export default function ChannelForm({
+  id,
+  channel,
+  submitHandler,
+  readOnlyFields = [],
+}: Props) {
   return (
     <Form<ChannelFormTypes>
       validationSchema={channelFormSchema}
       onSubmit={submitHandler}
+      resetValues={{
+        ...channel,
+        visibility: channel?.visibility?.toUpperCase() ?? "PUBLIC",
+      }}
       useFormProps={{
         defaultValues: {
           ...channel,
-          visibility: channel?.visibility?.toUpperCase() ?? 'PUBLIC',
+          visibility: channel?.visibility?.toUpperCase() ?? "PUBLIC",
         },
       }}
       className="isomorphic-form flex flex-grow flex-col @container"
     >
-      {({ register, control, formState: { errors, isSubmitting }}) => (
+      {({ register, control, formState: { errors, isSubmitting } }) => (
         <>
-        {console.log(errors)}
+          {console.log(errors)}
           <div className="flex-grow space-y-5 pb-10">
+            <Controller
+              name="media"
+              control={control}
+              render={({
+                field: { onChange, value },
+                formState: { errors },
+              }) => (
+                <div className={"space-y-1"}>
+                  <BannerForm
+                    bannerImage={value?.bannerImage ?? undefined}
+                    image={value?.image ?? undefined}
+                    onChangeBannerImage={(file) => {
+                      onChange({
+                        ...value,
+                        bannerImage: file,
+                      });
+                    }}
+                    onChangeImage={(file) => {
+                      onChange({
+                        ...value,
+                        image: file,
+                      });
+                    }}
+                  />
+                  {errors.media && (
+                    <FieldError
+                      error={
+                        errors.media.image?.message ??
+                        errors.media.bannerImage?.message
+                      }
+                    />
+                  )}
+                </div>
+              )}
+            />
             <div className={"grid grid-cols-2 gap-5"}>
               <Input
                 label="Title"
                 placeholder="Channel title"
                 {...register("title")}
-                readOnly={readOnlyFields.includes('title')}
-                disabled={readOnlyFields.includes('title')}
+                readOnly={readOnlyFields.includes("title")}
+                disabled={readOnlyFields.includes("title")}
                 error={errors.title?.message}
               />
               <Input
@@ -86,8 +136,8 @@ export default function ChannelForm({ id,  channel,submitHandler, readOnlyFields
                 error={errors?.price?.message}
                 prefix={"$"}
                 {...register("price")}
-                readOnly={readOnlyFields.includes('price')}
-                disabled={readOnlyFields.includes('price')}
+                readOnly={readOnlyFields.includes("price")}
+                disabled={readOnlyFields.includes("price")}
               />
               <Controller
                 name="visibility"
@@ -102,10 +152,10 @@ export default function ChannelForm({ id,  channel,submitHandler, readOnlyFields
                     error={errors?.visibility?.message}
                     getOptionValue={(option) => option.value}
                     getOptionDisplayValue={(option) => option.name}
-                    disabled={readOnlyFields.includes('visibility')}
+                    disabled={readOnlyFields.includes("visibility")}
                     displayValue={(value) => {
                       const option = visibilityOptions.find(
-                        (option) => option.value === value
+                        (option) => option.value === value,
                       );
                       return option?.name ?? "";
                     }}
@@ -123,7 +173,7 @@ export default function ChannelForm({ id,  channel,submitHandler, readOnlyFields
                     value={value}
                     error={errors?.moderator?.message}
                     isRequired={true}
-                    disabled={readOnlyFields.includes('moderator')}
+                    disabled={readOnlyFields.includes("moderator")}
                   />
                 )}
               />
@@ -133,8 +183,8 @@ export default function ChannelForm({ id,  channel,submitHandler, readOnlyFields
                 label="Description"
                 placeholder="Enter your channel description"
                 {...register("about")}
-                disabled={readOnlyFields.includes('about')}
-                readOnly={readOnlyFields.includes('about')}
+                disabled={readOnlyFields.includes("about")}
+                readOnly={readOnlyFields.includes("about")}
                 error={errors.about?.message}
                 textareaClassName="h-20"
                 className="col-span-2"
@@ -145,8 +195,8 @@ export default function ChannelForm({ id,  channel,submitHandler, readOnlyFields
                 label="Rules"
                 placeholder="Enter your channel rules"
                 {...register("rules")}
-                disabled={readOnlyFields.includes('rules')}
-                readOnly={readOnlyFields.includes('rules')}
+                disabled={readOnlyFields.includes("rules")}
+                readOnly={readOnlyFields.includes("rules")}
                 error={errors.about?.message}
                 textareaClassName="h-20"
                 className="col-span-2"

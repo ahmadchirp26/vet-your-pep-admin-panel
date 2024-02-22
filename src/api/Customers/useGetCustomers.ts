@@ -18,7 +18,6 @@ const GET_CUSTOMERS_ADMIN_QUERY = graphql(`
         id
         isActive
         lastName
-        role
         stripeCustomerId
       }
     }
