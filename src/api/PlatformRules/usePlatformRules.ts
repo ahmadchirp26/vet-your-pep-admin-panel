@@ -1,24 +1,25 @@
-import { graphql } from "@/lib/react-query-graphql";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useGraphQLRequestHandlerProtected } from "@/lib/auth-helpers";
-import { useState } from "react";
-import { customerKeys } from "./query-keys";
+"use client";
 
-const GET_CUSTOMERS_ADMIN_QUERY = graphql(`
-  query GetCustomersAdmin($input: ListCustomersInputs!) {
-    getCustomersAdmin(input: $input) {
-      totalRows
-      offset
+import { graphql } from "@/lib/react-query-graphql";
+import { useGraphQLRequestHandlerProtected } from "@/lib/auth-helpers";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { rulesKeys } from "./query-keys";
+
+const GET_PLATFORM_RULES_QUERY = graphql(`
+  query GetPlatFormRules($input: ListPlatFormRulesInput!) {
+    getPlatFormRules(input: $input) {
       limit
+      offset
+      totalRows
       results {
-        cellPhone
-        email
-        firstName
-        password
+        createdBy
+        createdDate
         id
-        isActive
-        lastName
-        stripeCustomerId
+        rules
+        title
+        updatedBy
+        updatedDate
       }
     }
   }
@@ -27,7 +28,7 @@ const GET_CUSTOMERS_ADMIN_QUERY = graphql(`
 interface Props {
   limit: number;
 }
-const useGetCustomers = (props: Props | undefined = { limit: 5 }) => {
+const usePlatformRules = (props: Props | undefined = { limit: 5 }) => {
   const [paginationParams, setPaginationParams] = useState({
     limit: props.limit,
     offset: 0,
@@ -40,9 +41,9 @@ const useGetCustomers = (props: Props | undefined = { limit: 5 }) => {
   const response = useQuery({
     // Following two lines are for pagination
     placeholderData: keepPreviousData,
-    queryKey: customerKeys.list({ ...paginationParams, q: searchQuery }),
+    queryKey: rulesKeys.list({ ...paginationParams, q: searchQuery }),
     queryFn: ({ queryKey }) => {
-      return protectedRequestHandler(GET_CUSTOMERS_ADMIN_QUERY, {
+      return protectedRequestHandler(GET_PLATFORM_RULES_QUERY, {
         // Following params are important for pagination
         input: {
           limit: queryKey[2].limit,
@@ -57,7 +58,7 @@ const useGetCustomers = (props: Props | undefined = { limit: 5 }) => {
 
   const paginationParamsExtended = {
     ...paginationParams,
-    totalRows: response.data?.getCustomersAdmin.totalRows ?? 0,
+    totalRows: response.data?.getPlatFormRules.totalRows ?? 0,
   };
 
   return {
@@ -95,7 +96,7 @@ const useGetCustomers = (props: Props | undefined = { limit: 5 }) => {
         if (response.isPlaceholderData || !lastPage) {
           return;
         }
-        const latestTotalRows = lastPage.getCustomersAdmin.totalRows ?? 0;
+        const latestTotalRows = paginationParamsExtended.totalRows;
         const maxPages = Math.max(
           pageSize ? Math.ceil(latestTotalRows / pageSize) : 0,
           1,
@@ -125,5 +126,24 @@ const useGetCustomers = (props: Props | undefined = { limit: 5 }) => {
   };
 };
 
-export default useGetCustomers;
-export type APIGetCustomersData = ReturnType<typeof useGetCustomers>["data"];
+export default usePlatformRules;
+export type APIGetPlatformRules = ReturnType<typeof usePlatformRules>["data"];
+
+// const rulesQuery = ["platformRules"];
+
+// export const usePlatformRules = () => {
+//   const protectedRequestHandler = useGraphQLRequestHandlerProtected();
+
+//   return useQuery({
+//     queryKey: rulesQuery,
+//     queryFn: () => {
+//       return protectedRequestHandler(GET_PLATFORM_RULES_QUERY, {
+//         input: {
+//           filter: {},
+//           limit: 100,
+//           offset: 0,
+//         },
+//       });
+//     },
+//   });
+// };
