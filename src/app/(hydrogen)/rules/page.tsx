@@ -1,5 +1,6 @@
 "use client";
-import { usePlatformRules } from "@/api/PlatformRules";
+
+import usePlatformRules from "@/api/PlatformRules/usePlatformRules";
 import PageHeader from "@/app/shared/page-header";
 import RulesTable from "@/app/shared/rules/rules-list/table";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ const pageHeader = {
 
 export default function Rules() {
   //   const { data, status, error, pageParams, filters } = useGetCustomers();
-  const { data, status, error } = usePlatformRules();
+  const { data, status, error, pageParams, filters } = usePlatformRules();
   console.log("Rules", data);
 
   if (status === "pending") {
@@ -47,7 +48,15 @@ export default function Rules() {
         </Link>
       </PageHeader>
 
-      <RulesTable data={data?.getPlatFormRules?.results} />
+      <RulesTable
+        data={data?.getPlatFormRules?.results}
+        remotePagination={pageParams}
+        remoteSearch={{
+          searchTerm: filters.searchQuery ?? "",
+          onSearchChange: (q) =>
+            filters.setSearchQuery(Boolean(q) ? q : undefined),
+        }}
+      />
     </>
   );
 }

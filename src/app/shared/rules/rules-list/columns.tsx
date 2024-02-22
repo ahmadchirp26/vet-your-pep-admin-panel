@@ -38,7 +38,7 @@ export const getColumns = ({ onDeleteItem }: Props) => [
       <div className="flex items-center justify-end gap-3 pe-4">
         <Tooltip
           size="sm"
-          content={() => "Edit Channel"}
+          content={() => "Edit Rule"}
           placement="top"
           color="invert"
         >
