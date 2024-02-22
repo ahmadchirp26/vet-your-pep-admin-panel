@@ -34,7 +34,7 @@ export const getColumns = ({ onDeleteItem }: Props) => [
     dataIndex: "action",
     key: "action",
     width: 130,
-    render: (_: string, row) => (
+    render: (_: string, row: { id: string; title: string; }) => (
       <div className="flex items-center justify-end gap-3 pe-4">
         <Tooltip
           size="sm"
