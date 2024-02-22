@@ -18,7 +18,7 @@ const GET_CUSTOMERS_ADMIN_QUERY = graphql(`
         id
         isActive
         lastName
-        role
+        # role
         stripeCustomerId
       }
     }
@@ -122,8 +122,7 @@ const useGetCustomers = (props: Props | undefined = { limit: 5 }) => {
           offset: 0,
         });
       },
-    }
-
+    },
   };
 };
 
