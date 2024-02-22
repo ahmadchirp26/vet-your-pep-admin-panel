@@ -1,4 +1,4 @@
-import './src/env.mjs';
+const env = await import("./src/env.mjs");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // skipTrailingSlashRedirect: true,
@@ -12,51 +12,55 @@ const nextConfig = {
   //     },
   //   ];
   // },
-  eslint:{
-    ignoreDuringBuilds:['src/__generated__']
+  eslint: {
+    ignoreDuringBuilds: ["src/__generated__"],
   },
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'randomuser.me',
-        port: '',
-        pathname: '/api/portraits/**',
+        protocol: "https",
+        hostname: "randomuser.me",
+        port: "",
+        pathname: "/api/portraits/**",
       },
       {
-        protocol: 'https',
-        hostname: 'cloudflare-ipfs.com',
-        port: '',
-        pathname: '/ipfs/**',
+        protocol: "https",
+        hostname: "cloudflare-ipfs.com",
+        port: "",
+        pathname: "/ipfs/**",
       },
       {
-        protocol: 'https',
-        hostname: 'avatars.githubusercontent.com',
-        port: '',
-        pathname: '/u/**',
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        port: "",
+        pathname: "/u/**",
       },
       {
-        protocol: 'https',
-        hostname: 'picsum.photos',
+        protocol: "https",
+        hostname: "picsum.photos",
         // port: '',
         // pathname: '/u/**',
       },
       {
-        protocol: 'https',
-        hostname: 'flagcdn.com',
+        protocol: "https",
+        hostname: "flagcdn.com",
         // port: '',
         // pathname: '/u/**',
       },
       {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
+        protocol: "https",
+        hostname: "images.unsplash.com",
         // port: '',
         // pathname: '/u/**',
       },
       {
-        protocol: 'https',
-        hostname: 's3.amazonaws.com',
-        pathname: '/redqteam.com/isomorphic-furyroad/public/**',
+        hostname: env.env.NEXT_PUBLIC_AWS_S3_FILE_HOST,
+        protocol: "https",
+      },
+      {
+        protocol: "https",
+        hostname: "s3.amazonaws.com",
+        pathname: "/redqteam.com/isomorphic-furyroad/public/**",
       },
     ],
   },

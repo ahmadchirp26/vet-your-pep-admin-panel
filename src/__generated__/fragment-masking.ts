@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ResultOf, DocumentTypeDecoration, TypedDocumentNode } from '@graphql-typed-document-node/core';
 import { FragmentDefinitionNode } from 'graphql';
 import { Incremental } from './graphql';
@@ -39,7 +38,7 @@ export function useFragment<TType>(
   _documentNode: DocumentTypeDecoration<TType, any>,
   fragmentType: FragmentType<DocumentTypeDecoration<TType, any>> | ReadonlyArray<FragmentType<DocumentTypeDecoration<TType, any>>> | null | undefined
 ): TType | ReadonlyArray<TType> | null | undefined {
-  return fragmentType;
+  return fragmentType as any;
 }
 
 
