@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from 'zod'
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   /**
@@ -7,7 +7,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    NODE_ENV: z.enum(['development', 'test', 'production'])
+    NODE_ENV: z.enum(["development", "test", "production"]),
   },
 
   /**
@@ -18,7 +18,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_REACT_APP_MAP_KEY: z.string(),
     NEXT_PUBLIC_SERVER_GRAPHQL_URL: z.string(),
-    NEXT_PUBLIC_GOOGLE_CLIENT_ID:z.string(),
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string(),
     NEXT_PUBLIC_AWS_S3_FILE_HOST: z.string(),
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
   },
@@ -32,12 +32,13 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_AWS_S3_FILE_HOST: process.env.NEXT_PUBLIC_AWS_S3_FILE_HOST,
     NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-    NEXT_PUBLIC_SERVER_GRAPHQL_URL: process.env.NEXT_PUBLIC_SERVER_GRAPHQL_URL
+    NEXT_PUBLIC_SERVER_GRAPHQL_URL: process.env.NEXT_PUBLIC_SERVER_GRAPHQL_URL,
+    NEXT_PUBLIC_AWS_S3_FILE_HOST: process.env.NEXT_PUBLIC_AWS_S3_FILE_HOST,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
    * This is especially useful for Docker builds.
    */
-  skipValidation: !!process.env.SKIP_ENV_VALIDATION
-})
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
+});

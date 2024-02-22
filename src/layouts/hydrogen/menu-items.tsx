@@ -1,28 +1,35 @@
-import { routes } from '@/config/routes';
-import { type ReactNode } from 'react';
+import { routes } from "@/config/routes";
+import { type ReactNode } from "react";
 import {
+  PiBookmarkFill,
+  PiRulerFill,
   PiUserCircleDuotone,
-  PiUsersDuotone
-} from 'react-icons/pi';
+  PiUsersDuotone,
+} from "react-icons/pi";
 
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems: Array<{
-  name:string,
-  href:string,
-  icon:ReactNode,
-  dropdownItems?:Array<{
-    name:string,
-    href:string,
-  }>
+  name: string;
+  href: string;
+  icon: ReactNode;
+  dropdownItems?: Array<{
+    name: string;
+    href: string;
+  }>;
 }> = [
   {
-    name:"Users",
+    name: "Users",
     href: routes.users.list,
     icon: <PiUserCircleDuotone />,
   },
   {
-    name:"Channels",
+    name: "Channels",
     href: routes.channels.list,
     icon: <PiUsersDuotone />,
-  }
+  },
+  {
+    name: "Platform Rules",
+    href: routes.rules.list,
+    icon: <PiBookmarkFill />,
+  },
 ];
