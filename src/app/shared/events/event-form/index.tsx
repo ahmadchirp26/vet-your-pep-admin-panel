@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import { type SubmitHandler, Controller } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 
 import { Textarea } from "@/components/ui/textarea";
@@ -14,10 +14,18 @@ import { FieldError } from "@/components/ui/field-error";
 import SelectChannel from "./SelectChannel";
 
 // form zod validation schema
-const channelFormSchema = z.object({
+const eventFormSchema = z.object({
   title: z.string().min(1, { message: "Event name is required" }),
-  date: z.string().min(1, { message: "Event date is required" }),
-  time: z.string().min(1, { message: "Event time is required" }),
+  date: z
+    .string()
+    .min(1, { message: "Event date is required" })
+    .refine(
+      (value) => {
+        const date = new Date(value);
+        return !isNaN(date.getTime());
+      },
+      { message: "Invalid date format" },
+    ),
   text: z.string().min(1, { message: "Event Details is required" }),
 
   media: z.object({
@@ -37,24 +45,25 @@ const channelFormSchema = z.object({
 });
 
 // generate form types from zod validation schema
-type ChannelFormTypes = z.infer<typeof channelFormSchema>;
+type EventFormTypes = z.infer<typeof eventFormSchema>;
 
 interface Props {
   id?: string;
-  channel?: ChannelFormTypes;
-  readOnlyFields?: Array<keyof ChannelFormTypes>;
-  submitHandler: SubmitHandler<ChannelFormTypes>;
+  event?: EventFormTypes;
+  readOnlyFields?: Array<keyof EventFormTypes>;
+  submitHandler: SubmitHandler<EventFormTypes>;
 }
+
 // main channel form component for create and update channel
 export default function EventForm({
   id,
-  channel,
+  event,
   submitHandler,
   readOnlyFields = [],
 }: Props) {
   return (
-    <Form<ChannelFormTypes>
-      validationSchema={channelFormSchema}
+    <Form<EventFormTypes>
+      validationSchema={eventFormSchema}
       onSubmit={submitHandler}
       resetValues={{
         ...event,
@@ -66,7 +75,12 @@ export default function EventForm({
       }}
       className="isomorphic-form flex flex-grow flex-col @container"
     >
-      {({ register, control, formState: { errors, isSubmitting } }) => (
+      {({
+        register,
+        control,
+        setValue,
+        formState: { errors, isSubmitting },
+      }) => (
         <>
           {console.log(errors)}
           <div className="flex-grow space-y-5 pb-10">
@@ -117,21 +131,35 @@ export default function EventForm({
                 )}
               />
             </div>
-            <div className={"grid grid-cols-2 gap-5"}>
-              <Input
-                type="date"
-                label="Date"
-                placeholder="Event Date"
-                {...register("date")}
-                error={errors.date?.message}
+            <div className={"grid grid-cols-1 gap-5"}>
+              <Controller
+                name="date"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Input
+                    type="datetime-local"
+                    label="Date"
+                    placeholder="Event Date"
+                    onChange={(e) => {
+                      setValue("date", e.target.value);
+                      onChange(e.target.value);
+                    }}
+                    value={value}
+                  />
+                )}
               />
-              <Input
+              {/* <Input
                 type="time"
                 label="Time"
                 placeholder="Event Time"
                 {...register("time")}
                 error={errors.time?.message}
-              />
+                defaultValue={
+                  event?.time
+                    ? new Date(event?.time).toISOString().slice(11, -5)
+                    : ""
+                }
+              /> */}
             </div>
             <div>
               <Textarea
