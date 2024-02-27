@@ -15,19 +15,40 @@ interface Props {
 
 export const getColumns = ({ onDeleteItem }: Props) => [
   {
-    title: <HeaderCell title="Rules Id" />,
+    title: <HeaderCell title="Event Id" />,
     dataIndex: "id",
     key: "id",
     width: 150,
     render: (id: string) => <Text className="text-sm">{id}</Text>,
   },
   {
-    title: <HeaderCell title="Rule Title" />,
+    title: <HeaderCell title="Event Title" />,
     dataIndex: "title",
     key: "title",
     width: 150,
     render: (title: string) => <Text className="text-sm">{title}</Text>,
   },
+  {
+    title: <HeaderCell title="Event Date" />,
+    dataIndex: "startDate",
+    key: "startDate",
+    width: 150,
+    render: (startDate: string) => (
+      <Text className="text-sm">{formatDate(startDate)}</Text>
+    ),
+  },
+
+  {
+    title: <HeaderCell title="Channel Title" />,
+    dataIndex: "channelTitle",
+    key: "channelTitle",
+    width: 150,
+    render: (_: string, row: any) => {
+      const channelTitle = row?.channel?.title ?? "";
+      return <Text className="text-sm">{channelTitle}</Text>;
+    },
+  },
+
   {
     // Need to avoid this issue -> <td> elements in a large <table> do not have table headers.
     title: <HeaderCell title="Actions" className="opacity-0" />,
@@ -38,16 +59,16 @@ export const getColumns = ({ onDeleteItem }: Props) => [
       <div className="flex items-center justify-end gap-3 pe-4">
         <Tooltip
           size="sm"
-          content={() => "Edit Rule"}
+          content={() => "Edit Event"}
           placement="top"
           color="invert"
         >
-          <Link href={routes.rules.edit(row.id)}>
+          <Link href={routes.events.edit(row.id)}>
             <ActionIcon
               tag="span"
               size="sm"
               variant="outline"
-              aria-label={"Edit Rule"}
+              aria-label={"Edit Event"}
               className="hover:text-gray-700"
             >
               <PencilIcon className="h-4 w-4" />
@@ -55,11 +76,16 @@ export const getColumns = ({ onDeleteItem }: Props) => [
           </Link>
         </Tooltip>
         <DeletePopover
-          title={`Delete the rule`}
-          description={`Are you sure you want to delete this ${row.title} rule?`}
+          title={`Delete the event`}
+          description={`Are you sure you want to delete this ${row.title} event?`}
           onDelete={() => onDeleteItem(row.id)}
         />
       </div>
     ),
   },
 ];
+
+const formatDate = (date: string) => {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(date).toLocaleDateString("en-US", options);
+};

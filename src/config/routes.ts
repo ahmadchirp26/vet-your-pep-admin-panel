@@ -15,4 +15,9 @@ export const routes = {
     create: "/rules/create",
     edit: (id: string) => `/rules/${id}/edit`,
   },
+  events: {
+    list: "/events",
+    create: "/events/create",
+    edit: (id: string) => `/events/${id}/edit`,
+  },
 };
