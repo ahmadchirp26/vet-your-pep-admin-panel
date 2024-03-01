@@ -4,11 +4,11 @@ import { graphql } from "@/lib/react-query-graphql";
 import { useGraphQLRequestHandlerProtected } from "@/lib/auth-helpers";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { rulesKeys } from "./query-keys";
+import { eventsKeys } from "./query-keys";
 
-const GET_PLATFORM_RULES_QUERY = graphql(`
-  query GetPlatFormRules($input: ListPlatFormRulesInput!) {
-    getPlatFormRules(input: $input) {
+const GET_ALL_EVENTS = graphql(`
+  query GetEvents($input: ListEventsInput!) {
+    getEvents(input: $input) {
       limit
       offset
       totalRows
@@ -16,9 +16,15 @@ const GET_PLATFORM_RULES_QUERY = graphql(`
         createdBy
         createdDate
         id
-        rules
+        images
+        text
         title
+        startDate
         updatedBy
+        channel {
+          title
+        }
+
         updatedDate
       }
     }
@@ -28,7 +34,7 @@ const GET_PLATFORM_RULES_QUERY = graphql(`
 interface Props {
   limit: number;
 }
-const usePlatformRules = (props: Props | undefined = { limit: 5 }) => {
+const useGetEvents = (props: Props | undefined = { limit: 5 }) => {
   const [paginationParams, setPaginationParams] = useState({
     limit: props.limit,
     offset: 0,
@@ -41,9 +47,9 @@ const usePlatformRules = (props: Props | undefined = { limit: 5 }) => {
   const response = useQuery({
     // Following two lines are for pagination
     placeholderData: keepPreviousData,
-    queryKey: rulesKeys.list({ ...paginationParams, q: searchQuery }),
+    queryKey: eventsKeys.list({ ...paginationParams, q: searchQuery }),
     queryFn: ({ queryKey }) => {
-      return protectedRequestHandler(GET_PLATFORM_RULES_QUERY, {
+      return protectedRequestHandler(GET_ALL_EVENTS, {
         // Following params are important for pagination
         input: {
           limit: queryKey[2].limit,
@@ -58,7 +64,7 @@ const usePlatformRules = (props: Props | undefined = { limit: 5 }) => {
 
   const paginationParamsExtended = {
     ...paginationParams,
-    totalRows: response.data?.getPlatFormRules.totalRows ?? 0,
+    totalRows: response.data?.getEvents.totalRows ?? 0,
   };
 
   return {
@@ -126,5 +132,5 @@ const usePlatformRules = (props: Props | undefined = { limit: 5 }) => {
   };
 };
 
-export default usePlatformRules;
-export type APIGetPlatformRules = ReturnType<typeof usePlatformRules>["data"];
+export default useGetEvents;
+export type APIGetEvents = ReturnType<typeof useGetEvents>["data"];

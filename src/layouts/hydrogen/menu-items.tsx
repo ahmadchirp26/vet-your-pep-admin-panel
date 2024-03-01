@@ -3,6 +3,7 @@ import { type ReactNode } from "react";
 import {
   PiBookmarkFill,
   PiRulerFill,
+  PiTelevisionDuotone,
   PiUserCircleDuotone,
   PiUsersDuotone,
 } from "react-icons/pi";
@@ -31,5 +32,10 @@ export const menuItems: Array<{
     name: "Platform Rules",
     href: routes.rules.list,
     icon: <PiBookmarkFill />,
+  },
+  {
+    name: "Events",
+    href: routes.events.list,
+    icon: <PiTelevisionDuotone />,
   },
 ];

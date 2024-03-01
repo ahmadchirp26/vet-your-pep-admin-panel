@@ -41,6 +41,7 @@ const useGetChannels = (props: Props | undefined = { limit: 5 }) => {
     offset: 0,
   });
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined);
+  const [query, setQuery] = useState<string | undefined>(undefined);
 
   // Getting Graphql request handler with Auth headers
   const protectedRequestHandler = useGraphQLRequestHandlerProtected();
@@ -48,7 +49,8 @@ const useGetChannels = (props: Props | undefined = { limit: 5 }) => {
   const response = useQuery({
     // Following two lines are for pagination
     placeholderData: keepPreviousData,
-    queryKey: channelKeys.list({ ...paginationParams, q: searchQuery }),
+    queryKey: channelKeys.list({ ...paginationParams, q: query }),
+
     queryFn: ({ queryKey }) => {
       return protectedRequestHandler(GET_CHANNELS_ADMIN_QUERY, {
         // Following params are important for pagination
@@ -71,6 +73,8 @@ const useGetChannels = (props: Props | undefined = { limit: 5 }) => {
   return {
     ...response,
     // Following is conversion to pages format from API response of offset and limit, and back.
+    query,
+    setQuery,
     pageParams: {
       page:
         paginationParamsExtended.offset / paginationParamsExtended.limit + 1,
