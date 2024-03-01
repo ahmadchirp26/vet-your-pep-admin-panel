@@ -30,6 +30,7 @@ const EditEvent = ({ id, accessToken }: Props) => {
     return "Error";
   }
   const startDate = data?.getEventById?.startDate
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     ? new Date(data?.getEventById?.startDate).toISOString().slice(0, 16)
     : "";
 
@@ -59,7 +60,7 @@ const EditEvent = ({ id, accessToken }: Props) => {
               : undefined,
           ].filter(Boolean) as FileSchema[];
 
-          const [bannerImage] =
+          const imagesUploaded =
             filesToBeUploaded.length > 0
               ? await S3UploadHandlerMutationFn(filesToBeUploaded, accessToken)
               : [undefined, undefined];
@@ -70,10 +71,10 @@ const EditEvent = ({ id, accessToken }: Props) => {
               title: data.title,
               text: data.text,
               startDate: data.date,
-
               channelId: data.channel?.id,
-
-              images: bannerImage?.uploadedURL[0],
+              images: imagesUploaded
+                .filter((i) => i?.uploadedURL)
+                .map((i) => i?.uploadedURL) as Array<string>,
             },
           });
           toast.success("Event updated successfully");

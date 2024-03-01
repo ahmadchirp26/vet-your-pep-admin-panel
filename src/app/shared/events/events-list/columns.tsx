@@ -43,7 +43,9 @@ export const getColumns = ({ onDeleteItem }: Props) => [
     dataIndex: "channelTitle",
     key: "channelTitle",
     width: 150,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     render: (_: string, row: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
       const channelTitle = row?.channel?.title ?? "";
       return <Text className="text-sm">{channelTitle}</Text>;
     },
@@ -86,6 +88,9 @@ export const getColumns = ({ onDeleteItem }: Props) => [
 ];
 
 const formatDate = (date: string) => {
-  const options = { year: "numeric", month: "long", day: "numeric" };
-  return new Date(date).toLocaleDateString("en-US", options);
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };
