@@ -36,7 +36,7 @@ export default function RuleForm({ id, rule, submitHandler }: Props) {
     >
       {({ register, control, formState: { errors, isSubmitting } }) => (
         <>
-          {console.log(errors)}
+         
           <div className="flex-grow space-y-5 pb-10">
             <div className={"grid grid-cols-2 gap-5"}>
               <Input
