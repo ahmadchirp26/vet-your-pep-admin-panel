@@ -104,7 +104,7 @@ const EditChannel = ({ id, accessToken }: Props) => {
           toast.success("Channel updated successfully");
           await refetch();
 
-          // router.push(routes.channels.list);
+          router.push(routes.channels.list);
         } catch (e) {
           toast.error("Error updating channel");
         }
