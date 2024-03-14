@@ -82,7 +82,7 @@ export default function EventForm({
         formState: { errors, isSubmitting },
       }) => (
         <>
-          {console.log(errors)}
+         
           <div className="flex-grow space-y-5 pb-10">
             <Controller
               name="media"
