@@ -49,7 +49,7 @@ const useGetChannels = (props: Props | undefined = { limit: 5 }) => {
   const response = useQuery({
     // Following two lines are for pagination
     placeholderData: keepPreviousData,
-    queryKey: channelKeys.list({ ...paginationParams, q: query }),
+    queryKey: channelKeys.list({ ...paginationParams, q: searchQuery }),
 
     queryFn: ({ queryKey }) => {
       return protectedRequestHandler(GET_CHANNELS_ADMIN_QUERY, {

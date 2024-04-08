@@ -68,19 +68,27 @@ const EditChannel = ({ id, accessToken }: Props) => {
       readOnlyFields={["moderator", "visibility", "price"]}
       submitHandler={async (data) => {
         try {
-          const filesToBeUploaded = [
+          const filesToBeUploaded1 = [
             data.media.image && typeof data.media.image !== "string"
               ? { ...data.media.image, id: "media" }
               : undefined,
+          ].filter(Boolean) as FileSchema[];
+          const filesToBeUploaded2 = [
             data.media.bannerImage && typeof data.media.bannerImage !== "string"
               ? { ...data.media.bannerImage, id: "banner" }
               : undefined,
           ].filter(Boolean) as FileSchema[];
 
-          const [profileImage, bannerImage] =
-            filesToBeUploaded.length > 0
-              ? await S3UploadHandlerMutationFn(filesToBeUploaded, accessToken)
+          const [profileImage] =
+            filesToBeUploaded1.length > 0
+              ? await S3UploadHandlerMutationFn(filesToBeUploaded1, accessToken)
               : [undefined, undefined];
+          const [bannerImage] =
+            filesToBeUploaded2.length > 0
+              ? await S3UploadHandlerMutationFn(filesToBeUploaded2, accessToken)
+              : [undefined, undefined];
+
+          console.log([profileImage], [bannerImage]);
 
           console.log("Sending values:", {
             id: id,
